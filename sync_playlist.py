@@ -10,18 +10,26 @@ destination_playlist_id = config.DESTINATION_PLAYLIST_ID
 source_playlist_ids = config.SOURCE_PLAYLIST_IDS
 sp = spotipy.Spotify(auth=token)
 
-tracks = set()
+track_ids = set()
 
 for playlist_id in source_playlist_ids:
-    offset = 0
-    playlist_tracks = sp.user_playlist_tracks(config.USERNAME, playlist_id, fields=None,
-                                              limit=100, offset=offset, market=None)
-    while len(playlist_tracks['items']) > 0:
-        for j, item in enumerate(tracks['items']):
-            tracks.add(item['track']['id'])
-        offset += 100
-        playlist_tracks = sp.user_playlist_tracks(config.USERNAME, playlist_id, fields=None,
-                                                  limit=100, offset=offset, market=None)
+    response = sp.user_playlist_tracks(config.USERNAME, playlist_id, fields=None,
+                                       limit=100, market=None)
+    playlist_tracks = response['tracks']['items']
+    while len(playlist_tracks) < response['tracks']['total']:
+        offset = len(playlist_tracks)
+        response = sp.user_playlist_tracks(config.USERNAME, playlist_id, fields=None,
+                                           limit=100, offset=offset, market=None)
+        playlist_tracks.extend(response['tracks']['items'])
+    for item in playlist_tracks:
+        track_ids.add(item['track']['id'])
+
+for track_id in track_ids:
+    print(track_id)
+
+print(len(track_ids))
+
+
 
 
 
