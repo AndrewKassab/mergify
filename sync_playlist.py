@@ -5,8 +5,8 @@ import spotipy.util as auth
 import os
 
 # Fill These in yourself
-destination_playlist_id = '1F2mahiwXN6lLuf3bpWE6y?si=ZUu0bdTxQMSGAxUG-CVa_A'
-source_playlist_ids = ['3nWTj1ZAdLJXNiaLdMUOwj?si=0THwLcT5SDujFJhKt5aYIw']
+destination_playlist_id = '1F2mahiwXN6lLuf3bpWE6y'
+source_playlist_ids = ['3nWTj1ZAdLJXNiaLdMUOwj']
 
 scope = 'playlist-read-private playlist-modify-private'
 
@@ -28,11 +28,11 @@ track_ids = set()
 
 for playlist_id in source_playlist_ids:
     response = sp.playlist_tracks(playlist_id, fields='items.track.id, total')
-    playlist_tracks = response['tracks']['items']
+    playlist_tracks = response['items']
     while True:
         response = sp.playlist_tracks(playlist_id,
                                            offset=len(playlist_tracks), fields='items.track.id, total')
-        playlist_tracks.extend(response['tracks']['items'])
+        playlist_tracks.extend(response['items'])
         if (len(response['items']) == 0):
             break
     for item in playlist_tracks:
