@@ -25,10 +25,11 @@ sp = spotipy.Spotify(auth=token)
 track_ids = set()
 
 for playlist_id in source_playlist_ids:
-    response = sp.user_playlist_tracks(username, playlist_id, fields='tracks')
+    response = sp.playlist_tracks(playlist_id, fields='tracks')
     playlist_tracks = response['tracks']['items']
+    tracktotal = response['tracks']['total']
     while len(playlist_tracks) < response['tracks']['total']:
-        response = sp.user_playlist_tracks(username, playlist_id,
+        response = sp.playlist_tracks(playlist_id,
                                            offset=len(playlist_tracks), fields='tracks')
         playlist_tracks.extend(response['tracks']['items'])
     for item in playlist_tracks:
