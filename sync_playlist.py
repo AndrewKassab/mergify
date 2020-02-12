@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import spotipy
 import spotipy.util as auth
 import os
