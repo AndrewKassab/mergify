@@ -5,8 +5,8 @@ import spotipy.util as auth
 import os
 
 # Fill These in yourself
-destination_playlist_id = '1F2mahiwXN6lLuf3bpWE6y'
-source_playlist_ids = ['3nWTj1ZAdLJXNiaLdMUOwj', '6eNpp03c7e3mnT2Otm7mwT']
+destination_playlist_id = ''
+source_playlist_ids = []
 
 scope = 'playlist-read-private playlist-modify-private'
 
