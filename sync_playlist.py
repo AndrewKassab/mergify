@@ -40,13 +40,15 @@ for playlist_id in source_playlist_ids:
 # get track ids from destination playlist
 destination_playlist_tracks = []
 while True:
-    response = sp.playlist_tracks(playlist_id,
-                                           offset=len(playlist_tracks), fields='items.track.id, total')
+    response = sp.playlist_tracks(destination_playlist_id,
+                                           offset=len(destination_playlist_tracks), fields='items.track.id, total')
     destination_playlist_tracks.extend(response['items'])
     if (len(response['items']) == 0):
         break
 for item in destination_playlist_tracks:
     destination_track_ids.add(item['track']['id'])
+
+exceptset = source_track_ids - destination_track_ids
 
 track_ids_to_add = list(source_track_ids - destination_track_ids)
 
