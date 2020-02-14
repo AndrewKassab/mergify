@@ -1,12 +1,8 @@
-#!/usr/bin/env python
-
 import spotipy
 import spotipy.util as auth
 import os
-
-# Fill These in yourself
-destination_playlist_id = ''
-source_playlist_ids = []
+import sys
+import json
 
 scope = 'playlist-read-private playlist-modify-private'
 
@@ -21,6 +17,45 @@ token = auth.prompt_for_user_token(username, scope, spotify_client_id,
                                    spotify_client_secret, spotify_redirect_uri)
 
 sp = spotipy.Spotify(auth=token)
+
+
+def setup():
+    user_playlists_list = []
+    offset = 0
+    while True:
+        response = sp.user_playlists(username, offset=offset)['items']
+        if len(response) == 0:
+            break
+        user_playlists_list.extend(response)
+        offset = offset + 50
+    user_playlists = {}
+    for item in user_playlists_list:
+        user_playlists[item['name']] = item['uri'][17:]
+
+    playlist_name = ""
+    json_data = {}
+    while True:
+        playlist_name = input('Enter the name of the destination playlist you would like to sync to: ')
+        if playlist_name in user_playlists:
+            break
+        print('Playlist does not exist, please try again.')
+    json_data["destination_playlist"] = {"name": playlist_name, "id": user_playlists[playlist_name]}
+    json_data["source_playlists"] = []
+    while True:
+        playlist_name = input('Enter name of source playlist you would like to sync from, or blank when finished')
+        if playlist_name == "":
+            break
+        if playlist_name not in user_playlists:
+            print('Playlist does not exist, please try again.')
+            continue
+        json_data["source_playlists"].append({"name": playlist_name, "id": user_playlists[playlist_name]})
+    if len(json_data["source_playlists"]) == 0:
+        print('Error, no source playlists specified, restarting setup...')
+        setup()
+        return
+    with open('playlist_data.json', 'w') as json_file:
+        json.dump(json_data, json_file)
+
 
 source_track_ids = set()
 destination_track_ids = set()
