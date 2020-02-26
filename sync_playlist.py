@@ -1,3 +1,7 @@
+#!/usr/bin/python3
+# Author: Andrew Kassab
+# github.com/AndrewKassab/Playlist-Sync
+
 import spotipy
 import spotipy.util as auth
 import os
@@ -18,7 +22,6 @@ except:
 
 data_file_path = os.path.expanduser('~') + '/.playlist_sync.json'
 
-# In your terminal, export these values as described in the readme.
 token = auth.prompt_for_user_token(username, scope, spotify_client_id,
                                    spotify_client_secret, spotify_redirect_uri)
 
