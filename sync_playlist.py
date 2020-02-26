@@ -12,6 +12,8 @@ spotify_client_id = os.environ['SPOTIFY_CLIENT_ID']
 spotify_client_secret = os.environ['SPOTIFY_CLIENT_SECRET']
 spotify_redirect_uri = os.environ['SPOTIFY_REDIRECT_URI']
 
+data_file_path = 'playlist_data.json'
+
 # In your terminal, export these values as described in the readme.
 token = auth.prompt_for_user_token(username, scope, spotify_client_id,
                                    spotify_client_secret, spotify_redirect_uri)
@@ -19,6 +21,7 @@ token = auth.prompt_for_user_token(username, scope, spotify_client_id,
 sp = spotipy.Spotify(auth=token)
 
 
+# First time use or after a reset
 def setup():
     user_playlists_list = []
     offset = 0
@@ -53,9 +56,16 @@ def setup():
         print('Error, no source playlists specified, restarting setup...')
         setup()
         return
-    with open('playlist_data.json', 'w') as json_file:
+    with open(data_file_path, 'w') as json_file:
         json.dump(json_data, json_file)
 
+
+# script begins
+if not os.path.isfile(data_file_path):
+    setup()
+
+with open(data_file_path, 'r') as data_file:
+    data = data_file.read()
 
 source_track_ids = set()
 destination_track_ids = set()
