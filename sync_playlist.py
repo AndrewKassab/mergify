@@ -1,18 +1,22 @@
 import spotipy
 import spotipy.util as auth
 import os
-import sys
 import json
 
 scope = 'playlist-read-private playlist-modify-private'
 
 # Export these in your environment
-username = os.environ['SPOTIFY_USERNAME']
-spotify_client_id = os.environ['SPOTIFY_CLIENT_ID']
-spotify_client_secret = os.environ['SPOTIFY_CLIENT_SECRET']
-spotify_redirect_uri = os.environ['SPOTIFY_REDIRECT_URI']
+try:
+    username = os.environ['SPOTIFY_USERNAME']
+    spotify_client_id = os.environ['SPOTIFY_CLIENT_ID']
+    spotify_client_secret = os.environ['SPOTIFY_CLIENT_SECRET']
+    spotify_redirect_uri = os.environ['SPOTIFY_REDIRECT_URI']
+except:
+    print('Environment variables have not been set correctly. '
+          'Please follow setup at github.com/andrewkassab/Playlist-Sync')
+    exit(-1)
 
-data_file_path = '.playlist_sync.json'
+data_file_path = os.path.expanduser('~') + '/.playlist_sync.json'
 
 # In your terminal, export these values as described in the readme.
 token = auth.prompt_for_user_token(username, scope, spotify_client_id,
@@ -49,8 +53,9 @@ def setup():
         if playlist_name == "":
             break
         if playlist_name not in user_playlists:
-            print('Playlist does not exist, please try again.')
+            print('Playlist does not exist, please try again. (make sure the name is exact)')
             continue
+        print(playlist_name, 'added as a source playlist.')
         json_data["source_playlists"].append({"name": playlist_name, "id": user_playlists[playlist_name]})
     if len(json_data["source_playlists"]) == 0:
         print('Error, no source playlists specified, restarting setup...')
@@ -77,9 +82,9 @@ for playlist in data['source_playlists']:
 destination_playlist_name = data['destination_playlist']['name']
 destination_playlist_id = data['destination_playlist']['id']
 
-print('Welcome to Playlist-Sync. If you would like to reset, delete the .playlist_sync.json file in your home directory')
-print('Source playlists: ', source_playlist_names)
-print('Destination playlist: ', destination_playlist_name)
+print('Welcome to Playlist-Sync. (to reset, delete the .playlist_sync.json file in your home directory)')
+print('Source playlists:', source_playlist_names)
+print('Destination playlist:', destination_playlist_name)
 
 print("Retrieving songs...")
 # get track ids from source playlists
@@ -114,7 +119,7 @@ print('Syncing songs to destination...')
 offset = 0
 while True:
     track_ids_to_add_shrunk = track_ids_to_add[offset:offset+100]
-    if (len(track_ids_to_add_shrunk) == 0):
+    if len(track_ids_to_add_shrunk) == 0:
         break
     sp.user_playlist_add_tracks(username, destination_playlist_id, track_ids_to_add_shrunk)
     offset = offset + 100
