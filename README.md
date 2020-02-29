@@ -1,4 +1,4 @@
-# Playlist-Sync 
+# Playlist-Sync (incomplete)
 
 - Python script to sync songs from multiple playlists into one. Helps to make sure your
 bigger playlist has all the songs your smaller, more stylised playlists without 
