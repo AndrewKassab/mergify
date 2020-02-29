@@ -9,7 +9,7 @@ personally having to add to both each time.
 - You must create your own app at [Spotify for Developers](https://developer.spotify.com/), follow their instructions provided.
 - After creating your app, you must export the following variables into your environment 
 (either in bashrc, your PATH, or some other location for your variables): 
-1. SPOTIFY_USERNAME : Your spotify username 
+1. SPOTIFY_USERNAME : Your spotify username (if Facebook-connected, then your username is just the id number after your share link)
 2. SPOTIFY_CLIENT_SECRET : Client secret provided for your created spotify app.
 3. SPOTIFY_CLIENT_ID : Client ID provided for your created spotify app
 4. SPOTIFY_REDIRECT_URI : Redirect URI used for your created app, can be something like http://localhost:3000/callback/
