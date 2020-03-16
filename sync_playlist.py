@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 # Author: Andrew Kassab
 # github.com/AndrewKassab/Playlist-Sync
 
