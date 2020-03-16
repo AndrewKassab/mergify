@@ -6,8 +6,9 @@ personally having to add to both each time.
 
 # Setup
 
-- You must create your own app at [Spotify for Developers](https://developer.spotify.com/), follow their instructions provided.
-- After creating your app, you must export the following variables into your environment 
+- You must create your own app at [Spotify for Developers](https://developer.spotify.com/), follow their instructions provided. 
+- After creating your app, you will receive a Client ID and Client Secret. 
+You must export the following variables into your environment 
 (either in bashrc, your PATH, or some other location for your variables): 
 1. SPOTIFY_USERNAME : Your username (if Facebook-connected, your username is the id number in your share link)
 2. SPOTIFY_CLIENT_SECRET : Client secret provided for your created spotify app.
