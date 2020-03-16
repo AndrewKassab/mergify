@@ -1,4 +1,4 @@
-# Playlist-Sync (incomplete)
+# Playlist-Sync
 
 - Python script to sync songs from multiple playlists into one. Helps to make sure your
 bigger playlist has all the songs your smaller, more stylised playlists without 
@@ -18,5 +18,5 @@ personally having to add to both each time.
 
 `sudo ./install.sh`
 
-* You should now be good to go, use command psync to start the script. If you ever want to reset after setup, 
-just go ahead and delete the .playlist_sync.json file in your home directory to clean the configurations.
+* You should now be good to go, use command psync to start the script. On first use, you will be prompted to provide the link you are redirected to for spotify authorization purposes. Afterwards you will be prompted to specify the playlists the script will work with (make sure names are inputted precisely). If you ever want to reset after setup, 
+just go ahead and delete the .playlist_sync.json file in your home directory to clean the configurations. After setup, you can use a task scheduler to run the script automatically when desired.
