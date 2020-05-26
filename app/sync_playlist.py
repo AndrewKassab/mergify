@@ -1,6 +1,3 @@
-# Author: Andrew Kassab
-# github.com/AndrewKassab/Playlist-Sync
-
 import spotipy
 import spotipy.util as auth
 import os
