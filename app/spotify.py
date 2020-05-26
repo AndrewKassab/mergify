@@ -9,14 +9,16 @@ redirect_uri = os.environ['PSYNC_REDIRECT_URI']
 
 def get_oauth_url():
     return "https://accounts.spotify.com/authorize?client_id=%s" \
-           "&response_type=code&redirect_uri=%s&scope=%s"
+           "&response_type=code&redirect_uri=%s&scope=%s" % (client_id, redirect_uri, scope)
 
 
-def get_user_playlists(token, username):
+def get_user_playlists(token):
     try:
         sp = spotipy.Spotify(auth=token)
     except:
         return -1
+    # TODO: Extract username from this call
+    username = sp.me()
     user_playlists_list = []
     offset = 0
     while True:
@@ -66,3 +68,11 @@ def sync_playlists(username, token, source_playlists_ids, destination_playlist_i
         offset = offset + 100
     return 1
 
+
+def get_username_from_token(token):
+    try:
+        sp = spotipy.Spotify(auth=token)
+    except:
+        return -1
+    # TODO: Extract username from here
+    return sp.me()['']
