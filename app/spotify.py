@@ -7,6 +7,11 @@ client_secret = os.environ['PSYNC_CLIENT_SECRET']
 redirect_uri = os.environ['PSYNC_REDIRECT_URI']
 
 
+def get_oauth_url():
+    return "https://accounts.spotify.com/authorize?client_id=%s" \
+           "&response_type=code&redirect_uri=%s&scope=%s"
+
+
 def get_user_playlists(token, username):
     sp = spotipy.spotify(auth=token)
     user_playlists_list = []

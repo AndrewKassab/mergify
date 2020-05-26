@@ -9,21 +9,22 @@ def homepage():
         redirect(url_for('login'))
 
 
-@app.route('/login', methods=['POST', 'GET'])
+@app.route('/login', methods=['GET'])
 def login():
     if is_logged_in(request):
         redirect(url_for('homepage'))
     else:
+        # TODO: Make loginpage with button that GET /auth
         render_template('loginpage.html')
 
 
-@app.route('/auth')
+@app.route('/auth', methods=['GET'])
 def spotify_auth():
     # redirect to my ouath with spotify
     redirect()
 
 
-@app.route('/callback')
+@app.route('/callback', methods=['GET'])
 def callback():
     if 'error' in request.args:
         redirect(url_for('login'))
@@ -32,7 +33,7 @@ def callback():
     response.set_cookie('auth_token', )
 
 
-@app.route('/logout')
+@app.route('/logout', methods=['GET'])
 def logout():
     request.delete_cookie('auth_token')
     request.delete_cookie('username')
@@ -47,3 +48,4 @@ def is_logged_in(user):
 
 if __name__ == '__main__':
     app.run(debug=True)
+
