@@ -30,16 +30,16 @@ def callback():
         return redirect(url_for('login'))
     # TODO: Make sure they can't reach /callback manually
     auth = request.args['code']
-    response = make_response()
+    response = redirect('/', 201)
     response.set_cookie('auth_token', auth)
-    response.set_cookie('', auth)
-    return redirect('/', 201)
+    return response
 
 
 @app.route('/logout', methods=['GET'])
 def logout():
-    request.delete_cookie('auth_token')
-    return redirect(url_for('login'))
+    response = redirect(url_for('login'))
+    response.set_cookie('auth_token', '', expires=0)
+    return response
 
 
 def is_logged_in(user):
