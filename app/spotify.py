@@ -48,18 +48,41 @@ def get_track_ids_from_playlist(playlist_id, token):
     return track_ids
 
 
-def sync_playlists(username, token, source_playlists_ids, destination_playlist_id):
+def sync_playlists(username, token, source_playlist_ids, destination_playlist_id):
     try:
         sp = spotipy.Spotify(auth=token)
     except:
         return -1
     source_track_ids = set()
-    for playlist_id in source_playlists_ids:
+    for playlist_id in source_playlist_ids:
         source_track_ids.union(get_track_ids_from_playlist(playlist_id,token))
     dest_track_ids = get_track_ids_from_playlist(destination_playlist_id, token)
     ids_to_add = list(source_track_ids - dest_track_ids)
 
     offset = 0
+    while True:
+        curr_ids = ids_to_add[offset:offset+100]
+        if len(curr_ids) == 0:
+            break
+        sp.user_playlist_add_tracks(username, destination_playlist_id, curr_ids)
+        offset = offset + 100
+    return 1
+
+
+def merge_to_new_playlist(username, token, source_playlist_ids, new_playlist_name):
+    try:
+        sp = spotipy.Spotify(auth=token)
+    except:
+        return -1
+    source_track_ids = set()
+    for playlist_id in source_playlist_ids:
+        source_track_ids.union(get_track_ids_from_playlist(playlist_id,token))
+    ids_to_add = list(source_track_ids)
+    offset = 0
+
+    # TODO: Create new playlist with new_playlist_name, set id to that playlist's id
+    destination_playlist_id = 1
+
     while True:
         curr_ids = ids_to_add[offset:offset+100]
         if len(curr_ids) == 0:

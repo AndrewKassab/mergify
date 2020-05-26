@@ -9,7 +9,6 @@ def homepage():
     if not is_logged_in(request):
         return redirect(url_for('login'))
     return render_template('homepage.html')
-    # TODO: Otherwise display home page / render the syncer
 
 
 @app.route('/login', methods=['GET'])
@@ -17,7 +16,6 @@ def login():
     if is_logged_in(request):
         return redirect(url_for('homepage'))
     else:
-        # TODO: Make loginpage with button that GET /auth
         return render_template('loginpage.html')
 
 
@@ -52,4 +50,3 @@ def is_logged_in(user):
 
 if __name__ == '__main__':
     app.run(debug=True)
-
