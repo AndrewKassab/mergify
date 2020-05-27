@@ -55,12 +55,8 @@ def logout():
 # TODO: Figure out how to pass error or success over to redirect
 @app.route('/merge', methods=['POST'])
 def merge_playlists():
-    print(request.form)
-    source_playlist_ids = request.form['source_playlists']
+    source_playlist_ids = [request.form['source_playlists']]
     destination_playlist_id = request.form['destination_playlist']
-    source_playlist_ids = []
-    for id in source_playlist_ids:
-        source_playlist_ids.append(id)
     token = get_access_token(request.cookies['auth_code'])
     if sync_playlists(token, source_playlist_ids, destination_playlist_id) == -1:
         error = "Error merging playlists, playlists not merged."
