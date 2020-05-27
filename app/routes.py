@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, make_response, redirect, url_for, flash, get_flashed_messages
+from flask import Flask, render_template, request, make_response, redirect, url_for
 from spotify import get_user_playlists, sync_playlists, get_oauth_url, get_access_token
 from forms import PlaylistForm
 
@@ -13,8 +13,10 @@ def homepage():
     playlists = get_user_playlists(token)
     playlist_names = playlists.keys()
     playlist_form = PlaylistForm(playlist_names)
-    response = render_template('homepage.html', playlist_form=playlist_form)
-    response.set_cookie('playlists', playlists)
+    # TODO: Figure out how to render error or success from /merge endpoint
+    response = make_response(render_template('homepage.html', form=playlist_form))
+    for playlist_name in playlists:  # add all playlist_name : playlist_id pairs to cookies
+        response.set_cookie(playlist_name, playlists[playlist_name])
     return response
 
 
@@ -33,7 +35,6 @@ def spotify_auth():
 
 @app.route('/callback/', methods=['GET'])
 def callback():
-    print(request.args)
     if 'error' in request.args or 'code' not in request.args:
         return redirect(url_for('login'))
     # TODO: Make sure they can't reach /callback manually
@@ -43,27 +44,28 @@ def callback():
     return response
 
 
-@app.route('/logout', methods=['GET'])
+@app.route('/logout', methods=['POST'])
 def logout():
     response = redirect(url_for('login'))
-    response.set_cookie('auth_code', '', expires=0)
-    response.set_cookie()
+    for cookie in response.cookies:
+        response.set_cookie(cookie, '', expires=0)
     return response
 
 
+# TODO: Figure out how to pass error or success over to redirect
 @app.route('/merge', methods=['POST'])
 def merge_playlists():
     source_playlist_names = request.form['sources']
     destination_playlist_name = request.form['dest']
     source_playlist_ids = []
     for name in source_playlist_names:
-        source_playlist_ids.append(request.cookies['playlists'][name])
+        source_playlist_ids.append(request.cookies[name])
     destination_playlist_id = request.cookies['playlists'][destination_playlist_name]
     token = get_access_token(request.cookies['auth_code'])
     if sync_playlists(token, source_playlist_ids, destination_playlist_id) == -1:
-        flash('Error merging playlists')
+        error = "Error merging playlists, playlists not merged."
         return make_response(redirect('/', 422))
-    flash('Playlist created successfully')
+    success = 'Playlists merged successfully! Check your Spotify!'
     return make_response(redirect('/', 201))
 
 

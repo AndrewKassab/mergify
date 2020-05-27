@@ -7,5 +7,6 @@ class PlaylistForm(Form):
     submit_button = SubmitField("Sync")
 
     def __init__(self, playlist_names):
+        super(PlaylistForm, self).__init__()
         self.source_playlists = SelectMultipleField("Source Playlists", choices=playlist_names)
         self.destination_playlist = SelectField("Destination Playlist", choices=playlist_names)

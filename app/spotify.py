@@ -15,7 +15,7 @@ def get_oauth_url():
 
 def get_access_token(auth_code):
     return oauth2.SpotifyOAuth(client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri,
-                               scope=scope).get_access_token(code=auth_code, as_dict=False)
+                               scope=scope).get_access_token(code=auth_code, as_dict=False, check_cache=False)
 
 
 def get_user_playlists(token):
@@ -23,7 +23,7 @@ def get_user_playlists(token):
         sp = spotipy.Spotify(auth=token)
     except:
         return -1
-    username = '123881475'
+    username = sp.me()['id']
     user_playlists_list = []
     offset = 0
     while True:
@@ -62,6 +62,7 @@ def sync_playlists(token, source_playlist_ids, destination_playlist_id):
         sp = spotipy.Spotify(auth=token)
     except:
         return -1
+    username = sp.me()['id']
     source_track_ids = set()
     for playlist_id in source_playlist_ids:
         source_track_ids.union(get_track_ids_from_playlist(playlist_id, token))
@@ -83,6 +84,7 @@ def merge_to_new_playlist(token, source_playlist_ids, new_playlist_name):
         sp = spotipy.Spotify(auth=token)
     except:
         return -1
+    username = sp.me()['id']
     source_track_ids = set()
     for playlist_id in source_playlist_ids:
         source_track_ids.union(get_track_ids_from_playlist(playlist_id, token))

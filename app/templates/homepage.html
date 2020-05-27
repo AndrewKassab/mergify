@@ -1,10 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:margin-left="http://www.w3.org/1999/xhtml" xmlns:font-weight="http://www.w3.org/1999/xhtml">
 <body>
-    <h1>Welcome Home</h1>
+    <center><h1>Mergify!</h1></center>
+
+    {% if error %}
+        <p><strong>Error:</strong> {{ error }}</p>
+    {% elif success %}
+        <p>{{ success }}</p>
+    {% endif %}
+
     <h2><a href="/logout">Logout</a></h2>
     <form action = "http://localhost:5000/merge" method = post>
-
+        <fieldset>
+            <legend>Merge form</legend>
+            {{ form.hidden_tag() }}
+            <div style = font-size:20px; font-weight:bold; margin-left:150px;>
+                {{ form.source_playlists.label }}<br>
+                {{ form.source_playlists }}
+                <br>
+                {{ form.destination_playlist.label }}<br>
+                {{ form.destination_playlist}}
+                <br>
+                {{ form.submit }}
+            </div>
+        </fieldset>
     </form>
 </body>
 </html>
