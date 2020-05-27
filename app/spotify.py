@@ -10,11 +10,15 @@ redirect_uri = os.environ['MERGIFY_REDIRECT_URI']
 
 def get_oauth_url():
     return oauth2.SpotifyOAuth(client_id=client_id, client_secret=client_secret,
-                              redirect_uri=redirect_uri, scope=scope).get_authorize_url()
+                               redirect_uri=redirect_uri, scope=scope).get_authorize_url()
+
+
+def get_access_token(auth_code):
+    return oauth2.SpotifyOAuth(client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri,
+                               scope=scope).get_access_token(code=auth_code, as_dict=False, check_cache=False)
 
 
 def get_user_playlists(token):
-    print(token)
     try:
         sp = spotipy.Spotify(auth=token)
     except:
@@ -56,13 +60,13 @@ def sync_playlists(username, token, source_playlist_ids, destination_playlist_id
         return -1
     source_track_ids = set()
     for playlist_id in source_playlist_ids:
-        source_track_ids.union(get_track_ids_from_playlist(playlist_id,token))
+        source_track_ids.union(get_track_ids_from_playlist(playlist_id, token))
     dest_track_ids = get_track_ids_from_playlist(destination_playlist_id, token)
     ids_to_add = list(source_track_ids - dest_track_ids)
 
     offset = 0
     while True:
-        curr_ids = ids_to_add[offset:offset+100]
+        curr_ids = ids_to_add[offset:offset + 100]
         if len(curr_ids) == 0:
             break
         sp.user_playlist_add_tracks(username, destination_playlist_id, curr_ids)
@@ -77,15 +81,15 @@ def merge_to_new_playlist(username, token, source_playlist_ids, new_playlist_nam
         return -1
     source_track_ids = set()
     for playlist_id in source_playlist_ids:
-        source_track_ids.union(get_track_ids_from_playlist(playlist_id,token))
+        source_track_ids.union(get_track_ids_from_playlist(playlist_id, token))
     ids_to_add = list(source_track_ids)
     offset = 0
 
-    # TODO: Create new playlist with new_playlist_name, set id to that playlist's id
-    destination_playlist_id = 1
+    dest_playlist = sp.user_playlist_create(user=username, name=new_playlist_name)
+    destination_playlist_id = dest_playlist['id'] # TODO: Make this actually work
 
     while True:
-        curr_ids = ids_to_add[offset:offset+100]
+        curr_ids = ids_to_add[offset:offset + 100]
         if len(curr_ids) == 0:
             break
         sp.user_playlist_add_tracks(username, destination_playlist_id, curr_ids)

@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, make_response, redirect, url_for
-from spotify import get_user_playlists, sync_playlists, get_oauth_url
+from spotify import get_user_playlists, sync_playlists, get_oauth_url, get_access_token
 from forms import PlaylistForm
 
 app = Flask(__name__)
@@ -9,8 +9,8 @@ app = Flask(__name__)
 def homepage():
     if not is_logged_in(request):
         return redirect(url_for('login'))
-    playlists = get_user_playlists(request.cookies['auth_token'])
-    print(playlists)
+    token = get_access_token(request.cookies['auth_code'])
+    playlists = get_user_playlists(token)
     return render_template('homepage.html')
 
 
@@ -29,24 +29,25 @@ def spotify_auth():
 
 @app.route('/callback/', methods=['GET'])
 def callback():
+    print(request.args)
     if 'error' in request.args or 'code' not in request.args:
         return redirect(url_for('login'))
     # TODO: Make sure they can't reach /callback manually
-    auth = request.args['code']
+    auth_code = request.args['code']
     response = redirect('/', 201)
-    response.set_cookie('auth_token', auth)
+    response.set_cookie('auth_code', auth_code)
     return response
 
 
 @app.route('/logout', methods=['GET'])
 def logout():
     response = redirect(url_for('login'))
-    response.set_cookie('auth_token', '', expires=0)
+    response.set_cookie('auth_code', '', expires=0)
     return response
 
 
 def is_logged_in(user):
-    if 'auth_token' in user.cookies:
+    if 'auth_code' in user.cookies:
         return True
     return False
 
