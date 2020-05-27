@@ -85,19 +85,6 @@ def merge_to_new_playlist(token, source_playlist_ids, new_playlist_name):
     except:
         return -1
     username = sp.me()['id']
-    source_track_ids = set()
-    for playlist_id in source_playlist_ids:
-        source_track_ids.union(get_track_ids_from_playlist(playlist_id, token))
-    ids_to_add = list(source_track_ids)
-    offset = 0
-
     dest_playlist = sp.user_playlist_create(user=username, name=new_playlist_name)
     destination_playlist_id = dest_playlist['id'] # TODO: Make this actually work
-
-    while True:
-        curr_ids = ids_to_add[offset:offset + 100]
-        if len(curr_ids) == 0:
-            break
-        sp.user_playlist_add_tracks(username, destination_playlist_id, curr_ids)
-        offset = offset + 100
-    return 1
+    return sync_playlists(token, source_playlist_ids, destination_playlist_id)
