@@ -1,24 +1,25 @@
 import spotipy
+from spotipy import oauth2
 import os
 
 scope = 'playlist-read-private playlist-modify-private'
-client_id = os.environ['PSYNC_CLIENT_ID']
-client_secret = os.environ['PSYNC_CLIENT_SECRET']
-redirect_uri = os.environ['PSYNC_REDIRECT_URI']
+client_id = os.environ['MERGIFY_CLIENT_ID']
+client_secret = os.environ['MERGIFY_CLIENT_SECRET']
+redirect_uri = os.environ['MERGIFY_REDIRECT_URI']
 
 
 def get_oauth_url():
-    return "https://accounts.spotify.com/authorize?client_id=%s" \
-           "&response_type=code&redirect_uri=%s&scope=%s" % (client_id, redirect_uri, scope)
+    return oauth2.SpotifyOAuth(client_id=client_id, client_secret=client_secret,
+                              redirect_uri=redirect_uri, scope=scope).get_authorize_url()
 
 
 def get_user_playlists(token):
+    print(token)
     try:
         sp = spotipy.Spotify(auth=token)
     except:
         return -1
-    # TODO: Extract username from this call
-    username = sp.me()
+    username = '123881475'
     user_playlists_list = []
     offset = 0
     while True:

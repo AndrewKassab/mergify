@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, make_response, redirect, url_for
 from spotify import get_user_playlists, sync_playlists, get_oauth_url
+from forms import PlaylistForm
 
 app = Flask(__name__)
 
@@ -8,6 +9,8 @@ app = Flask(__name__)
 def homepage():
     if not is_logged_in(request):
         return redirect(url_for('login'))
+    playlists = get_user_playlists(request.cookies['auth_token'])
+    print(playlists)
     return render_template('homepage.html')
 
 
@@ -26,7 +29,7 @@ def spotify_auth():
 
 @app.route('/callback/', methods=['GET'])
 def callback():
-    if 'error' in request.args:
+    if 'error' in request.args or 'code' not in request.args:
         return redirect(url_for('login'))
     # TODO: Make sure they can't reach /callback manually
     auth = request.args['code']
