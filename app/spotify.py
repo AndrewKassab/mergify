@@ -35,7 +35,11 @@ def get_user_playlists(token):
     playlists = {}
     for item in user_playlists_list:
         playlists[item['name']] = item['uri'][17:]
-    return sp.user_playlists(username)
+    playlists = sp.user_playlists(username)['items']
+    playlist_dict = {}
+    for item in playlists:
+        playlist_dict[item['name']] = item['id']
+    return playlist_dict
 
 
 def get_track_ids_from_playlist(playlist_id, token):

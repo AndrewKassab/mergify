@@ -11,7 +11,9 @@ def homepage():
         return redirect(url_for('login'))
     token = get_access_token(request.cookies['auth_code'])
     playlists = get_user_playlists(token)
-    return render_template('homepage.html')
+    playlist_names = playlists.keys()
+    playlist_form = PlaylistForm(playlist_names)
+    return render_template('homepage.html', playlist_form=playlist_form)
 
 
 @app.route('/login', methods=['GET'])
