@@ -44,7 +44,7 @@ def callback():
     return response
 
 
-@app.route('/logout', methods=['POST'])
+@app.route('/logout', methods=['GET'])
 def logout():
     response = redirect(url_for('login'))
     for cookie in response.cookies:
