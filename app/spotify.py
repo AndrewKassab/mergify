@@ -20,10 +20,7 @@ def get_access_token(auth_code):
 
 
 def get_user_playlists(token):
-    try:
-        sp = spotipy.Spotify(auth=token)
-    except:
-        return -1
+    sp = spotipy.Spotify(auth=token)
     username = sp.me()['id']
     user_playlists_list = []
     offset = 0
@@ -59,10 +56,7 @@ def get_track_ids_from_playlist(playlist_id, token):
 
 
 def sync_playlists(token, source_playlist_ids, destination_playlist_id):
-    try:
-        sp = spotipy.Spotify(auth=token)
-    except:
-        return -1
+    sp = spotipy.Spotify(auth=token)
     username = sp.me()['id']
     source_track_ids = set()
     for playlist_id in source_playlist_ids:
@@ -80,10 +74,7 @@ def sync_playlists(token, source_playlist_ids, destination_playlist_id):
 
 
 def merge_to_new_playlist(token, source_playlist_ids, new_playlist_name):
-    try:
-        sp = spotipy.Spotify(auth=token)
-    except:
-        return -1
+    sp = spotipy.Spotify(auth=token)
     username = sp.me()['id']
     dest_playlist = sp.user_playlist_create(user=username, name=new_playlist_name)
     destination_playlist_id = dest_playlist['id'] # TODO: Make this actually work

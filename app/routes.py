@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, make_response, redirect, url_for
+from flask import Flask, render_template, request, make_response, redirect, url_for, flash, jsonify
 from spotify import get_user_playlists, sync_playlists, get_oauth_url, get_access_token
 from forms import PlaylistForm
+from spotipy import SpotifyException
 
 app = Flask(__name__)
 
@@ -15,7 +16,6 @@ def homepage():
     choices = [(v, k) for k, v in playlists.items()]
     playlist_form.source_playlists.choices = choices
     playlist_form.destination_playlist.choices = choices
-    # TODO: Figure out how to render error or success from /merge endpoint
     response = make_response(render_template('homepage.html', form=playlist_form))
     return response
 
@@ -52,17 +52,23 @@ def logout():
     return response
 
 
-# TODO: Figure out how to pass error or success over to redirect
 @app.route('/merge', methods=['POST'])
 def merge_playlists():
-    source_playlist_ids = [request.form['source_playlists']]
-    destination_playlist_id = request.form['destination_playlist']
-    token = get_access_token(request.cookies['auth_code'])
-    if sync_playlists(token, source_playlist_ids, destination_playlist_id) == -1:
-        error = "Error merging playlists, playlists not merged."
-        return make_response(redirect('/', 422))
-    success = 'Playlists merged successfully! Check your Spotify!'
-    return make_response(redirect('/', 201))
+    payload = {}
+    code = 201
+    try:
+        source_playlist_ids = [request.form['source_playlists']]
+        destination_playlist_id = request.form['destination_playlist']
+        token = get_access_token(request.cookies['auth_code'])
+        sync_playlists(token, source_playlist_ids, destination_playlist_id)
+        response = make_response(redirect('/', 201))
+    except Exception as e:
+        if type(e) == SpotifyException:
+            payload['detail'] = e.msg
+            code = e.http_status
+        else:
+            code = 422
+    return jsonify(payload), code
 
 
 def is_logged_in(user):
