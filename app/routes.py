@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, make_response, redirect, url_
 from spotify import get_user_playlists, sync_playlists, get_oauth_url, get_access_token
 from forms import PlaylistForm
 from spotipy import SpotifyException
+import sqlite3 as sql
+from db.database import db_path
 
 app = Flask(__name__)
 
@@ -37,10 +39,12 @@ def spotify_auth():
 def callback():
     if 'error' in request.args or 'code' not in request.args:
         return redirect(url_for('login'))
-    # TODO: Make sure they can't reach /callback manually
     auth_code = request.args['code']
     response = redirect('/', 201)
     response.set_cookie('auth_code', auth_code)
+    with sql.connect(db_path) as con:
+        cur = con.cursor()
+        cur.execute("INSERT INTO users (auth_code) VALUES(?)", (auth_code,))
     return response
 
 

@@ -79,3 +79,9 @@ def merge_to_new_playlist(token, source_playlist_ids, new_playlist_name):
     dest_playlist = sp.user_playlist_create(user=username, name=new_playlist_name)
     destination_playlist_id = dest_playlist['id'] # TODO: Make this actually work
     return sync_playlists(token, source_playlist_ids, destination_playlist_id)
+
+
+def get_username_from_authcode(code):
+    token = get_access_token(code)
+    sp = spotipy.Spotify(auth=token)
+    return sp.me()['id']
