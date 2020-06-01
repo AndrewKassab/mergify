@@ -54,21 +54,20 @@ def logout():
 
 @app.route('/merge', methods=['POST'])
 def merge_playlists():
-    payload = {}
     code = 201
     try:
         source_playlist_ids = [request.form['source_playlists']]
         destination_playlist_id = request.form['destination_playlist']
         token = get_access_token(request.cookies['auth_code'])
         sync_playlists(token, source_playlist_ids, destination_playlist_id)
-        response = make_response(redirect('/', 201))
+        flash('Playlist merge was successful, please check your spotify!')
     except Exception as e:
         if type(e) == SpotifyException:
-            payload['detail'] = e.msg
             code = e.http_status
         else:
             code = 422
-    return jsonify(payload), code
+        flash('Playlist merge unsuccessful, please try logging out and logging back in before trying again')
+    return make_response(redirect('/'), code)
 
 
 def is_logged_in(user):

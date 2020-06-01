@@ -3,11 +3,13 @@
 <body>
     <center><h1>Mergify!</h1></center>
 
-    {% if error %}
-        <p><strong>Error:</strong> {{ error }}</p>
-    {% elif success %}
-        <p>{{ success }}</p>
-    {% endif %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <strong>{{ message }}</strong>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 
     <h2><a href="/logout">Logout</a></h2>
     <form action = "http://localhost:5000/merge" method = 'post'>
