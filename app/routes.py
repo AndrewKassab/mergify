@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, make_response, redirect, url_for, flash, jsonify
-from spotify import get_user_playlists, sync_playlists, get_oauth_url, get_access_token
+from spotify import *
 from forms import PlaylistForm
 from spotipy import SpotifyException
 import sqlite3 as sql
@@ -40,11 +40,13 @@ def callback():
     if 'error' in request.args or 'code' not in request.args:
         return redirect(url_for('login'))
     auth_code = request.args['code']
+    username = get_username_from_authcode(auth_code)
     response = redirect('/', 201)
     response.set_cookie('auth_code', auth_code)
+    response.set_cookie('username', username)
     with sql.connect(db_path) as con:
         cur = con.cursor()
-        cur.execute("INSERT INTO users (auth_code) VALUES(?)", (auth_code,))
+        cur.execute("INSERT INTO users (username, auth_code) VALUES(?, ?)", (username, auth_code))
     return response
 
 
