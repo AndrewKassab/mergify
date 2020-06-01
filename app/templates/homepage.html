@@ -18,14 +18,14 @@
             {{ form.hidden_tag() }}
             <div style = font-size:20px; font-weight:bold; margin-left:150px;>
                 {{ form.source_playlists.label }}<br>
-                {{ form.source_playlists(multiple=True) }}
+                {{ form.source_playlists(multiple=True, size=20) }}
                 <br>
                 <p></p>
                 {{ form.destination_playlist.label }}<br>
                 {{ form.destination_playlist() }}
                 <p></p>
                 <br>
-                {{ form.submit_button() }}
+                <input type = "submit" value = "SYNC" style = "height:50px;width=200px"/>
             </div>
         </fieldset>
     </form>
