@@ -1,23 +1,21 @@
-# Playlist-Sync
+# Mergify (TBD)
 
-- Python script to sync songs from multiple playlists into one. Helps to make sure your
-bigger playlist has all the songs your smaller, more stylised playlists without 
-personally having to add to both each time. 
+- Merge and sync up your spotify playlists!
 
-# Setup
+# Development 
 
 - You must create your own app at [Spotify for Developers](https://developer.spotify.com/), follow their instructions provided. 
 - After creating your app, you will receive a Client ID and Client Secret. 
 You must export the following variables into your environment 
 (either in bashrc, your PATH, or some other location for your variables): 
-1. SPOTIFY_USERNAME : Your username (if Facebook-connected, your username is the id number in your share link)
-2. SPOTIFY_CLIENT_SECRET : Client secret provided for your created spotify app.
-3. SPOTIFY_CLIENT_ID : Client ID provided for your created spotify app
-4. SPOTIFY_REDIRECT_URI : Redirect URI used for your created app, can be something like http://localhost:3000/callback/
+1. MERGIFY_CLIENT_SECRET : Client secret provided for your created spotify app.
+2. MERGIFY_CLIENT_ID : Client ID provided for your created spotify app
+3. MERGIFY_REDIRECT_URI : Redirect URI used for your created app, can be something like http://localhost:5000/callback/
 
-- Afterwards, while in the cloned directory, run the install script: 
+- After cloning the repostory, make sure you have dependencies installed by typing the following into root: 
 
-`sudo ./install.sh`
+`python3 -m pip install -r requirements.txt`
 
-* You should now be good to go, use command psync to start the script. On first use, you will be prompted to provide the link you are redirected to for spotify authorization purposes. Afterwards you will be prompted to specify the playlists the script will work with (make sure names are inputted precisely). If you ever want to reset after setup, 
-just go ahead and delete the .playlist_sync.json file in your home directory to clean the configurations. After setup, you can use a task scheduler to run the script automatically when desired.
+- After that, go ahead and execute `flask run` from within the app directory
+
+- You should now be able to visit http://localhost:5000/
