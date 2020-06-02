@@ -46,7 +46,12 @@ def callback():
     response.set_cookie('username', username)
     with sql.connect(db_path) as con:
         cur = con.cursor()
-        cur.execute("INSERT INTO users (username, auth_code) VALUES(?, ?)", (username, auth_code))
+        cur.execute("SELECT * FROM users WHERE username = '%s'" % username)
+        rows = cur.fetchall()
+        if len(rows) <= 0:
+            cur.execute("INSERT INTO users (username, auth_code) VALUES(?, ?)", (username, auth_code))
+        else:
+            cur.execute("UPDATE users SET auth_code = '%s' WHERE username = '%s'" % (auth_code, username))
     return response
 
 
