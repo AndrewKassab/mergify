@@ -41,7 +41,7 @@ def callback():
         return redirect(url_for('login'))
     auth_code = request.args['code']
     username = get_username_from_authcode(auth_code)
-    response = redirect('/', 201)
+    response = redirect(url_for('homepage'), 201)
     response.set_cookie('auth_code', auth_code)
     response.set_cookie('username', username)
     with sql.connect(db_path) as con:
@@ -78,7 +78,7 @@ def merge_playlists():
         else:
             code = 422
         flash('Playlist merge unsuccessful, please try logging out and logging back in before trying again')
-    return make_response(redirect('/'), code)
+    return make_response(redirect(url_for('homepage')), code)
 
 
 def is_logged_in(user):
