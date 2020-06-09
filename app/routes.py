@@ -69,6 +69,7 @@ def merge_playlists():
     try:
         source_playlist_ids = [request.form['source_playlists']]
         destination_playlist_id = request.form['destination_playlist']
+        form = request.form
         token = get_access_token(request.cookies['auth_code'])
         sync_playlists(token, source_playlist_ids, destination_playlist_id)
         flash('Playlist merge was successful, please check your spotify!')
