@@ -1,4 +1,4 @@
-# Mergify (TBD)
+# Mergify
 
 - Merge and sync up your spotify playlists!
 
