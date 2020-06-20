@@ -14,7 +14,7 @@ def homepage():
         return redirect(url_for('login'))
     username = request.cookies['username']
     access_token = db.get_access_token_for_user(username)
-    if is_access_token_expired(access_token):
+    if is_access_token_expired(db.get_expiration_time_for_user(username)):
         refresh_token = db.get_refresh_token_for_user(username)
         access_token = get_access_token_from_refresh_token(refresh_token)
         db.update_access_token_for_user(username, access_token)
