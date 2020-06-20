@@ -2,8 +2,7 @@ from flask import Flask, render_template, request, make_response, redirect, url_
 from spotify import *
 from forms import PlaylistForm
 from spotipy import SpotifyException
-import sqlite3 as sql
-from db.database import db_path
+from db.database import *
 
 app = Flask(__name__)
 
@@ -12,8 +11,13 @@ app = Flask(__name__)
 def homepage():
     if not is_logged_in(request):
         return redirect(url_for('login'))
-    token = get_access_token(request.cookies['auth_code'])
-    playlists = get_user_playlists(token)
+    username = request.cookies['username']
+    access_token = get_access_token_for_user(username)
+    if is_access_token_expired(access_token):
+        refresh_token = get_refresh_token_for_user(username)
+        access_token = get_access_token_from_refresh_token(refresh_token)
+        update_access_token_for_user(username, access_token)
+    playlists = get_user_playlists(access_token)
     playlist_form = PlaylistForm()
     choices = [(v, k) for k, v in playlists.items()]
     playlist_form.source_playlists.choices = choices
@@ -40,18 +44,17 @@ def callback():
     if 'error' in request.args or 'code' not in request.args:
         return redirect(url_for('login'))
     auth_code = request.args['code']
-    username = get_username_from_authcode(auth_code)
+    token_info = get_token_info_from_code(auth_code)
+    access_token = token_info['access_token']
+    refresh_token = token_info['refresh_token']
+    username = get_username_from_access_token(access_token)
     response = redirect(url_for('homepage'), 201)
-    response.set_cookie('auth_code', auth_code)
     response.set_cookie('username', username)
-    with sql.connect(db_path) as con:
-        cur = con.cursor()
-        cur.execute("SELECT * FROM users WHERE username = '%s'" % username)
-        rows = cur.fetchall()
-        if len(rows) <= 0:
-            cur.execute("INSERT INTO users (username, auth_code) VALUES(?, ?)", (username, auth_code))
-        else:
-            cur.execute("UPDATE users SET auth_code = '%s' WHERE username = '%s'" % (auth_code, username))
+    if does_user_exist(username):
+        update_access_token_for_user(access_token)
+        update_refresh_token_for_user(refresh_token)
+    else:
+        add_new_entry_to_users(username, access_token, refresh_token)
     return response
 
 
@@ -70,7 +73,7 @@ def merge_playlists():
         source_playlist_ids = [request.form['source_playlists']]
         destination_playlist_id = request.form['destination_playlist']
         form = request.form
-        token = get_access_token(request.cookies['auth_code'])
+        token = get_access_token_for_user(request.cookies['username'])
         sync_playlists(token, source_playlist_ids, destination_playlist_id)
         flash('Playlist merge was successful, please check your spotify!')
     except Exception as e:

@@ -1,22 +1,49 @@
 import spotipy
 from spotipy import oauth2
 import os
+import requests
+import json
 
-scope = 'playlist-read-private playlist-modify-private'
-client_id = os.environ['MERGIFY_CLIENT_ID']
-client_secret = os.environ['MERGIFY_CLIENT_SECRET']
-redirect_uri = os.environ['MERGIFY_REDIRECT_URI']
+SCOPE = 'playlist-read-private playlist-modify-private'
+CLIENT_ID = os.environ['MERGIFY_CLIENT_ID']
+CLIENT_SECRET = os.environ['MERGIFY_CLIENT_SECRET']
+REDIRECT_URI = os.environ['MERGIFY_REDIRECT_URI']
 
-spoauth = oauth2.SpotifyOAuth(username='123881475', client_id=client_id, client_secret=client_secret,
-                              redirect_uri=redirect_uri, scope=scope)
+SPOTIFY_TOKEN_ENDPOINT = 'https://accounts.spotify.com/api/token'
+
+spoauth = oauth2.SpotifyOAuth(client_id=CLIENT_ID, client_secret=CLIENT_SECRET,
+                              redirect_uri=REDIRECT_URI, scope=SCOPE)
 
 
 def get_oauth_url():
     return spoauth.get_authorize_url()
 
 
-def get_access_token(auth_code):
-    return spoauth.get_access_token(code=auth_code, as_dict=False, check_cache=True)
+# { access_token: "", refresh_token: "" }
+def get_token_info_from_code(auth_code):
+    body = {
+        "grant_type": 'authorization_code',
+        "code": str(auth_code),
+        "redirect_uri": REDIRECT_URI,
+        "client_id": CLIENT_ID,
+        "client_secret": CLIENT_SECRET
+    }
+
+    response = requests.post(SPOTIFY_TOKEN_ENDPOINT, data=body)
+    text = json.loads(response.text)
+
+    token_info = {'access_token': text['access_token'], 'refresh_token': text['refresh_token']}
+    return token_info
+
+
+def get_access_token_from_refresh_token(refresh_token):
+    spoauth.refresh_access_token()
+    pass
+
+
+def is_access_token_expired(access_token):
+    return spoauth.is_token_expired()
+    pass
 
 
 def get_user_playlists(token):
@@ -81,7 +108,6 @@ def merge_to_new_playlist(token, source_playlist_ids, new_playlist_name):
     return sync_playlists(token, source_playlist_ids, destination_playlist_id)
 
 
-def get_username_from_authcode(code):
-    token = get_access_token(code)
-    sp = spotipy.Spotify(auth=token)
+def get_username_from_access_token(access_token):
+    sp = spotipy.Spotify(auth=access_token)
     return sp.me()['id']
