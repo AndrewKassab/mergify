@@ -37,8 +37,7 @@ def get_token_info_from_code(auth_code):
 
 
 def get_access_token_from_refresh_token(refresh_token):
-    spoauth.refresh_access_token()
-    pass
+    return spoauth.refresh_access_token(refresh_token)
 
 
 def is_access_token_expired(access_token):

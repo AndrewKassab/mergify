@@ -2,7 +2,8 @@ from flask import Flask, render_template, request, make_response, redirect, url_
 from spotify import *
 from forms import PlaylistForm
 from spotipy import SpotifyException
-from db.database import *
+from util import *
+from db.database import db
 
 app = Flask(__name__)
 
@@ -12,11 +13,11 @@ def homepage():
     if not is_logged_in(request):
         return redirect(url_for('login'))
     username = request.cookies['username']
-    access_token = get_access_token_for_user(username)
+    access_token = db.get_access_token_for_user(username)
     if is_access_token_expired(access_token):
-        refresh_token = get_refresh_token_for_user(username)
+        refresh_token = db.get_refresh_token_for_user(username)
         access_token = get_access_token_from_refresh_token(refresh_token)
-        update_access_token_for_user(username, access_token)
+        db.update_access_token_for_user(username, access_token)
     playlists = get_user_playlists(access_token)
     playlist_form = PlaylistForm()
     choices = [(v, k) for k, v in playlists.items()]
@@ -50,11 +51,11 @@ def callback():
     username = get_username_from_access_token(access_token)
     response = redirect(url_for('homepage'), 201)
     response.set_cookie('username', username)
-    if does_user_exist(username):
-        update_access_token_for_user(access_token)
-        update_refresh_token_for_user(refresh_token)
+    if db.does_user_exist(username):
+        db.update_access_token_for_user(access_token)
+        db.update_refresh_token_for_user(refresh_token)
     else:
-        add_new_entry_to_users(username, access_token, refresh_token)
+        db.add_new_entry_to_users(username, access_token, refresh_token)
     return response
 
 
@@ -73,7 +74,7 @@ def merge_playlists():
         source_playlist_ids = [request.form['source_playlists']]
         destination_playlist_id = request.form['destination_playlist']
         form = request.form
-        token = get_access_token_for_user(request.cookies['username'])
+        token = db.get_access_token_for_user(request.cookies['username'])
         sync_playlists(token, source_playlist_ids, destination_playlist_id)
         flash('Playlist merge was successful, please check your spotify!')
     except Exception as e:
