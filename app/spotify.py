@@ -5,6 +5,7 @@ import requests
 import json
 
 SCOPE = 'playlist-modify-public playlist-read-private playlist-modify-private'
+
 CLIENT_ID = os.environ['MERGIFY_CLIENT_ID']
 CLIENT_SECRET = os.environ['MERGIFY_CLIENT_SECRET']
 REDIRECT_URI = os.environ['MERGIFY_REDIRECT_URI']
