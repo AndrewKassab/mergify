@@ -17,12 +17,12 @@ class MergifyDataBase:
     def __get_column_for_user(self, column_name, username):
         con = sql.connect(db_path)
         cur = con.cursor()
-        cur.execute("SELECT '%s' FROM users WHERE username = '%s'" % (column_name,username))
+        cur.execute("SELECT %s FROM users WHERE username == '%s'" % (column_name, username))
         rows = cur.fetchall()
         con.close()
         if len(rows) <= 0:
             return -1
-        return rows[0]
+        return rows[0][0]
 
     def get_access_token_for_user(self, username):
         return self.__get_column_for_user('access_token', username)
@@ -38,10 +38,11 @@ class MergifyDataBase:
         cur = con.cursor()
         cur.execute("SELECT * FROM users WHERE username = '%s'" % username)
         rows = cur.fetchall()
-        con.close()
         if len(rows) <= 0:
             return -1
         cur.execute("UPDATE users SET '%s' = '%s'' WHERE username = '%s'" % (column_name, new_value, username))
+        con.commit()
+        con.close()
 
 
     def update_access_token_for_user(self, username, new_access_token):
@@ -67,6 +68,7 @@ class MergifyDataBase:
         expiration_time = time.time() + token_life
         cur = con.cursor()
         cur.execute("INSERT INTO users VALUES ('%s','%s','%d','%s')" % (username, access_token, expiration_time, refresh_token))
+        con.commit()
         con.close()
 
 

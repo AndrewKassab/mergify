@@ -52,8 +52,8 @@ def callback():
     response = redirect(url_for('homepage'), 201)
     response.set_cookie('username', username)
     if db.does_user_exist(username):
-        db.update_access_token_for_user(access_token)
-        db.update_refresh_token_for_user(refresh_token)
+        db.update_access_token_for_user(username, access_token)
+        db.update_refresh_token_for_user(username, refresh_token)
     else:
         db.add_new_entry_to_users(username, access_token, refresh_token)
     return response
