@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, make_response, redirect, url_for, flash, jsonify
 from spotify import *
-from forms import PlaylistForm
 from spotipy import SpotifyException
 from util import *
 from db.database import db
@@ -19,11 +18,8 @@ def homepage():
         access_token = get_access_token_from_refresh_token(refresh_token)
         db.update_access_token_for_user(username, access_token)
     playlists = get_user_playlists(access_token)
-    playlist_form = PlaylistForm()
     choices = [(v, k) for k, v in playlists.items()]
-    playlist_form.source_playlists.choices = choices
-    playlist_form.destination_playlist.choices = choices
-    response = make_response(render_template('homepage.html', form=playlist_form))
+    response = make_response(render_template('homepage.html'))
     return response
 
 
