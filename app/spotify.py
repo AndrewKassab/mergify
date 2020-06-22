@@ -93,7 +93,6 @@ def sync_playlists(token, source_playlist_ids, destination_playlist_id):
             break
         sp.user_playlist_add_tracks(username, destination_playlist_id, curr_ids)
         offset = offset + 100
-    return 1
 
 
 def merge_to_new_playlist(token, source_playlist_ids, new_playlist_name):
