@@ -8,7 +8,6 @@ db_path = os.path.abspath(os.path.dirname(__file__) + "/database.db")
 
 class MergifyDataBase:
 
-    # TODO: Find out if con ordering works through test
     def __init__(self, path):
         self.path = path
         if not os.path.exists(path):
