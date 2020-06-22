@@ -21,7 +21,8 @@ class DatabaseTest(unittest.TestCase):
         con = sql.connect(db_path)
         cur = con.cursor()
         expiration_time = time.time() + token_life
-        cur.execute("INSERT INTO users VALUES ('%s','%s','%d','%s')" % (cls.username, cls.access_token, expiration_time, cls.refresh_token))
+        cur.execute("INSERT INTO users VALUES ('%s','%s','%d','%s')" % (cls.username, cls.access_token,
+                                                                        expiration_time, cls.refresh_token))
         con.commit()
         con.close()
 

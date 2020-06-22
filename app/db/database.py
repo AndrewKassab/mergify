@@ -12,7 +12,8 @@ class MergifyDataBase:
         self.path = path
         if not os.path.exists(path):
             con = sql.connect(path)
-            con.execute('CREATE TABLE users (username TEXT PRIMARY_KEY UNIQUE, access_token TEXT, expiration_time INTEGER, refresh_token TEXT)')
+            con.execute('CREATE TABLE users (username TEXT PRIMARY_KEY UNIQUE, access_token TEXT, '
+                        'expiration_time INTEGER, refresh_token TEXT)')
             con.commit()
             con.close()
 
@@ -42,7 +43,8 @@ class MergifyDataBase:
         rows = cur.fetchall()
         if len(rows) <= 0:
             return -1
-        cur.execute("UPDATE users SET %s = '%s' WHERE username = '%s'" % (column_name, new_value, username))
+        cur.execute("UPDATE users SET %s = '%s' WHERE username = '%s'" % (column_name, new_value,
+                                                                          username))
         con.commit()
         con.close()
 
