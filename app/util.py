@@ -1,4 +1,3 @@
-import time
 from db.database import *
 
 
@@ -9,4 +8,7 @@ def is_access_token_expired(expiration_time):
 
 
 def is_access_token_valid(access_token, username):
-    pass
+    actual_token = db.get_access_token_for_user(username)
+    if access_token == actual_token:
+        return True
+    return False
