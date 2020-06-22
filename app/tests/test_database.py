@@ -33,21 +33,20 @@ class DatabaseTest(unittest.TestCase):
         self.db.add_new_entry_to_users(test_username, test_access_token, test_refresh_token)
         con = sql.connect(db_path)
         cur = con.cursor()
-        cur.execute("SELECT * FROM users")
+        cur.execute("SELECT * FROM users WHERE username = '%s'" % test_username)
         rows = cur.fetchall()
         con.close()
-        self.assertEqual(len(rows), 2)
-        exected_row = [test_username, test_access_token, test_refresh_token]
-        actual_row = [rows[1][0], rows[1][1], rows[1][3]]
-        self.assertEqual(actual_row, exected_row)
+        expected_row = [test_username, test_access_token, test_refresh_token]
+        actual_row = [rows[0][0], rows[0][1], rows[0][3]]
+        self.assertEqual(expected_row, actual_row)
 
     def test_get_access_token_for_user(self):
         access_token = self.db.get_access_token_for_user(self.username)
-        self.assertEqual(access_token, self.access_token)
+        self.assertEqual(self.access_token, access_token)
 
     def test_get_refresh_token_for_user(self):
-        access_token = self.db.get_refresh_token_for_user(self.username)
-        self.assertEqual(access_token, self.refresh_token)
+        refresh_token = self.db.get_refresh_token_for_user(self.username)
+        self.assertEqual(self.refresh_token, refresh_token)
 
     def test_update_access_token_for_user(self):
         new_access_token = "new_access_token"

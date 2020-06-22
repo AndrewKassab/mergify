@@ -60,8 +60,9 @@ def merge_playlists():
             code = e.http_status
             payload['error_detail'] = "spotify err"  # TODO: Update to grab detail from exception
         else:
-            code = 422
-    return jsonify(payload), code
+            code = e.code
+            payload['error_detail'] = 'Bad Request'
+    return payload, code
 
 
 @app.route('/login')
