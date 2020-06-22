@@ -9,12 +9,13 @@ db_path = os.path.abspath(os.path.dirname(__file__) + "/database.db")
 class MergifyDataBase:
 
     # TODO: Find out if con ordering works through test
-    def __init__(self, path=db_path):
+    def __init__(self, path):
         self.path = path
-        con = sql.connect(path)
         if not os.path.exists(path):
+            con = sql.connect(path)
             con.execute('CREATE TABLE users (username TEXT PRIMARY_KEY UNIQUE, access_token TEXT, expiration_time INTEGER, refresh_token TEXT)')
-        con.close()
+            con.commit()
+            con.close()
 
     def __get_column_for_user(self, column_name, username):
         con = sql.connect(self.path)
@@ -73,4 +74,4 @@ class MergifyDataBase:
         con.close()
 
 
-db = MergifyDataBase()
+db = MergifyDataBase(db_path)
