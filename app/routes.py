@@ -64,6 +64,9 @@ def merge_playlists():
     return jsonify(payload), code
 
 
+@app.route('/login')
+
+
 def is_logged_in(user):
     if 'auth_code' in user.cookies:
         return True
