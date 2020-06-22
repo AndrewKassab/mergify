@@ -46,11 +46,14 @@ def merge_playlists():
     try:
         source_playlist_ids = [request.form['source_playlists']]
         destination_playlist_id = request.form['destination_playlist']
+        username = request.form['username']
         token = request.headers['access_token']
-        username = get_username_from_access_token(token)
         if not is_access_token_valid(token, username):
             code = 401
             payload['error_detail'] = 'Invalid Authorization'
+            return jsonify(payload), code
+        if is_users_access_token_expired(username):
+            token = refresh_and_update_access_token_for_user(username)
         sync_playlists(token, source_playlist_ids, destination_playlist_id)
     except Exception as e:
         if type(e) == SpotifyException:

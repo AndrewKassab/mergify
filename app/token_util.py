@@ -20,4 +20,5 @@ def refresh_and_update_access_token_for_user(username):
     refresh_token = db.get_refresh_token_for_user(username)
     new_token = refresh_access_token(refresh_token)
     db.update_access_token_for_user(username, new_token)
+    return new_token
 
