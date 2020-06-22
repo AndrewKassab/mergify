@@ -3,7 +3,6 @@ from spotipy import oauth2
 import os
 import requests
 import json
-from db.database import db
 
 SCOPE = 'playlist-modify-public playlist-read-private playlist-modify-private'
 
