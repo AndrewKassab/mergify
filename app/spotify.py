@@ -3,6 +3,7 @@ from spotipy import oauth2
 import os
 import requests
 import json
+from db.database import db
 
 SCOPE = 'playlist-modify-public playlist-read-private playlist-modify-private'
 
@@ -37,13 +38,8 @@ def get_token_info_from_code(auth_code):
     return token_info
 
 
-def get_access_token_from_refresh_token(refresh_token):
+def refresh_access_token(refresh_token):
     return spoauth.refresh_access_token(refresh_token)
-
-
-def is_access_token_expired(access_token):
-    return spoauth.is_token_expired()
-    pass
 
 
 def get_user_playlists(token):

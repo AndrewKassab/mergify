@@ -46,7 +46,7 @@ def merge_playlists():
     try:
         source_playlist_ids = [request.form['source_playlists']]
         destination_playlist_id = request.form['destination_playlist']
-        token = request.form['access_token']
+        token = request.headers['access_token']
         username = get_username_from_access_token(token)
         if not is_access_token_valid(token, username):
             code = 401
