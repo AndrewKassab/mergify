@@ -2,7 +2,8 @@ from db.database import *
 from spotify import refresh_access_token
 
 
-def is_access_token_expired(expiration_time):
+def is_users_access_token_expired(username):
+    expiration_time = db.get_expiration_time_for_user(username)
     if time.time() > expiration_time:
         return True
     return False

@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, make_response, redirect, url_for, flash, jsonify
 from spotify import *
 from spotipy import SpotifyException
-from util import *
+from token_util import *
 from db.database import db
 
 app = Flask(__name__)
