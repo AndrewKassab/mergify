@@ -58,14 +58,11 @@ def merge_playlists():
     except Exception as e:
         if type(e) == SpotifyException:
             code = e.http_status
-            payload['error_detail'] = "spotify err"  # TODO: Update to grab detail from exception
+            payload['error_detail'] = e.msg
         else:
             code = e.code
             payload['error_detail'] = 'Bad Request'
     return payload, code
-
-
-@app.route('/login')
 
 
 def is_logged_in(user):
