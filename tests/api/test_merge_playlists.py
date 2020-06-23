@@ -24,7 +24,6 @@ class MergePlaylistsTest(unittest.TestCase):
         data = {'source_playlists': 'sff3234', 'destination_playlist': 'asd213', 'username': seed_username}
         session = requests.Session()
         response = session.post(url=MERGE_ENDPOINT, headers=headers, data=data)
-        content = json.loads(response.content)
         self.assertEqual(404, response.status_code)
 
 

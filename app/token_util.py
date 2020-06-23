@@ -1,4 +1,5 @@
-from db.database import *
+import time
+from db.database import db
 from spotify import refresh_access_token
 
 
