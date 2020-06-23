@@ -25,16 +25,15 @@ jobs:
         python -m pip install --upgrade pip
         pip install pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Start App
+    - name: Run API Tests
       run: |
         cd ./app
         flask run &
+        cd .. 
+        py.test ./tests/api
       env:
         MERGIFY_CLIENT_ID: ${{secrets.CLIENT_ID}}
         MERGIFY_CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
         MERGIFY_SEED_USERNAME: ${{secrets.SEED_USERNAME}}
         MERGIFY_SEED_TOKEN: ${{secrets.SEED_TOKEN}}
         MERGIFY_REDIRECT_URI: ${{secrets.REDIRECT_URI}}
-    - name: Run API Tests
-      run: |
-        py.test ./tests/api
