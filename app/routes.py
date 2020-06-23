@@ -1,38 +1,10 @@
-from flask import Flask, render_template, request, make_response, redirect, url_for, flash, jsonify
+from flask import request, redirect, url_for, jsonify, Blueprint
 from spotify import *
-from forms import PlaylistForm
 from spotipy import SpotifyException
-from util import *
+from token_util import *
 from db.database import db
 
-app = Flask(__name__)
-
-
-@app.route('/', methods=['GET'])
-def homepage():
-    if not is_logged_in(request):
-        return redirect(url_for('login'))
-    username = request.cookies['username']
-    access_token = db.get_access_token_for_user(username)
-    if is_access_token_expired(db.get_expiration_time_for_user(username)):
-        refresh_token = db.get_refresh_token_for_user(username)
-        access_token = get_access_token_from_refresh_token(refresh_token)
-        db.update_access_token_for_user(username, access_token)
-    playlists = get_user_playlists(access_token)
-    playlist_form = PlaylistForm()
-    choices = [(v, k) for k, v in playlists.items()]
-    playlist_form.source_playlists.choices = choices
-    playlist_form.destination_playlist.choices = choices
-    response = make_response(render_template('homepage.html', form=playlist_form))
-    return response
-
-
-@app.route('/login', methods=['GET'])
-def login():
-    if is_logged_in(request):
-        return redirect(url_for('homepage'))
-    else:
-        return render_template('loginpage.html')
+app = Blueprint('routes', __name__)
 
 
 @app.route('/auth', methods=['GET'])
@@ -70,20 +42,27 @@ def logout():
 @app.route('/merge', methods=['POST'])
 def merge_playlists():
     code = 201
+    payload = {}
     try:
         source_playlist_ids = [request.form['source_playlists']]
         destination_playlist_id = request.form['destination_playlist']
-        form = request.form
-        token = db.get_access_token_for_user(request.cookies['username'])
+        username = request.form['username']
+        token = request.headers['access_token']
+        if not is_access_token_valid(token, username):
+            code = 401
+            payload['error_detail'] = 'Invalid Authorization'
+            return jsonify(payload), code
+        if is_users_access_token_expired(username):
+            token = refresh_and_update_access_token_for_user(username)
         sync_playlists(token, source_playlist_ids, destination_playlist_id)
-        flash('Playlist merge was successful, please check your spotify!')
     except Exception as e:
         if type(e) == SpotifyException:
             code = e.http_status
+            payload['error_detail'] = e.msg
         else:
-            code = 422
-        flash('Playlist merge unsuccessful, please try logging out and logging back in before trying again')
-    return make_response(redirect(url_for('homepage')), code)
+            code = e.code
+            payload['error_detail'] = 'Bad Request'
+    return payload, code
 
 
 def is_logged_in(user):

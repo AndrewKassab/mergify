@@ -5,17 +5,27 @@ import time
 token_life = 3000
 db_path = os.path.abspath(os.path.dirname(__file__) + "/database.db")
 
+seeded_username = os.environ.get('MERGIFY_SEED_USERNAME')
+seeded_token = os.environ.get('MERGIFY_SEED_TOKEN')
+
 
 class MergifyDataBase:
 
-    def create_db(self):
-        con = sql.connect(db_path)
-        con.execute('CREATE TABLE users (username TEXT PRIMARY_KEY UNIQUE, access_token TEXT, expiration_time INTEGER, refresh_token TEXT)')
-        print('Database created.')
-        con.close()
+    def __init__(self, path):
+        self.path = path
+        if not os.path.exists(path):
+            con = sql.connect(path)
+            con.execute('CREATE TABLE users (username TEXT PRIMARY_KEY UNIQUE, access_token TEXT, '
+                        'expiration_time INTEGER, refresh_token TEXT)')
+            if seeded_username and seeded_token:
+                cur = con.cursor()
+                cur.execute("INSERT INTO users VALUES ('%s','%s','%d','%s')" % (seeded_username,
+                                                                                seeded_token, 1, seeded_token))
+            con.commit()
+            con.close()
 
     def __get_column_for_user(self, column_name, username):
-        con = sql.connect(db_path)
+        con = sql.connect(self.path)
         cur = con.cursor()
         cur.execute("SELECT %s FROM users WHERE username == '%s'" % (column_name, username))
         rows = cur.fetchall()
@@ -34,16 +44,16 @@ class MergifyDataBase:
         return self.__get_column_for_user('expiration_time', username)
 
     def __update_user_column(self, username, column_name, new_value):
-        con = sql.connect(db_path)
+        con = sql.connect(self.path)
         cur = con.cursor()
         cur.execute("SELECT * FROM users WHERE username = '%s'" % username)
         rows = cur.fetchall()
         if len(rows) <= 0:
             return -1
-        cur.execute("UPDATE users SET %s = '%s' WHERE username = '%s'" % (column_name, new_value, username))
+        cur.execute("UPDATE users SET %s = '%s' WHERE username = '%s'" % (column_name, new_value,
+                                                                          username))
         con.commit()
         con.close()
-
 
     def update_access_token_for_user(self, username, new_access_token):
         expiration_time = time.time() + token_life
@@ -54,7 +64,7 @@ class MergifyDataBase:
         self.__update_user_column(username, 'refresh_token', new_refresh_token)
 
     def does_user_exist(self, username):
-        con = sql.connect(db_path)
+        con = sql.connect(self.path)
         cur = con.cursor()
         cur.execute("SELECT * FROM users WHERE username = '%s'" % username)
         rows = cur.fetchall()
@@ -64,7 +74,7 @@ class MergifyDataBase:
         return True
 
     def add_new_entry_to_users(self, username, access_token, refresh_token):
-        con = sql.connect(db_path)
+        con = sql.connect(self.path)
         expiration_time = time.time() + token_life
         cur = con.cursor()
         cur.execute("INSERT INTO users VALUES ('%s','%s','%d','%s')" % (username, access_token, expiration_time, refresh_token))
@@ -72,5 +82,8 @@ class MergifyDataBase:
         con.close()
 
 
-db = MergifyDataBase()
+# TODO: DEV ONLY
+if os.path.exists(db_path):
+    os.remove(db_path)
 
+db = MergifyDataBase(db_path)
