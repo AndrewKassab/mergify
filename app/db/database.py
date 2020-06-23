@@ -83,6 +83,7 @@ class MergifyDataBase:
 
 
 # TODO: DEV ONLY
-os.remove(db_path)
+if os.path.exists(db_path):
+    os.remove(db_path)
 
 db = MergifyDataBase(db_path)
