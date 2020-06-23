@@ -82,4 +82,7 @@ class MergifyDataBase:
         con.close()
 
 
+# TODO: DEV ONLY
+os.remove(db_path)
+
 db = MergifyDataBase(db_path)
