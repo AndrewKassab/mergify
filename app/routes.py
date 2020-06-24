@@ -54,6 +54,7 @@ def merge_playlists():
             return jsonify(payload), code
         if is_users_access_token_expired(username):
             token = refresh_and_update_access_token_for_user(username)
+            payload['new_token'] = token
         sync_playlists(token, source_playlist_ids, destination_playlist_id)
     except Exception as e:
         if type(e) == SpotifyException:
@@ -63,6 +64,21 @@ def merge_playlists():
             code = e.code
             payload['error_detail'] = 'Bad Request'
     return payload, code
+
+
+# For Testing
+@app.route('/refresh', methods=['POST'])
+def refresh_token():
+    payload = {}
+    username = request.form['username']
+    token = request.headers['access_token']
+    if not is_access_token_valid(token, username):
+        code = 401
+        payload['error_detail'] = 'Invalid Authorization'
+        return jsonify(payload), code
+    token = refresh_and_update_access_token_for_user(username)
+    payload['access_token'] = token
+    return payload, 201
 
 
 def is_logged_in(user):
