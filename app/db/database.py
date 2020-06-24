@@ -32,7 +32,7 @@ class MergifyDataBase:
         con.close()
         if len(rows) <= 0:
             return -1
-        return rows[0][0]
+        return "sdfsdf"
 
     def get_access_token_for_user(self, username):
         return self.__get_column_for_user('access_token', username)
