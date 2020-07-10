@@ -54,12 +54,8 @@ def get_user_playlists(token):
         offset = offset + 50
     playlists = {}
     for item in user_playlists_list:
-        playlists[item['name']] = item['uri'][17:]
-    playlists = sp.user_playlists(username)['items']
-    playlist_dict = {}
-    for item in playlists:
-        playlist_dict[item['name']] = item['id']
-    return playlist_dict
+        playlists[item['id']] = item['name']
+    return playlists
 
 
 def get_track_ids_from_playlist(playlist_id, token):
@@ -99,7 +95,8 @@ def merge_to_new_playlist(token, source_playlist_ids, new_playlist_name):
     username = sp.me()['id']
     dest_playlist = sp.user_playlist_create(user=username, name=new_playlist_name)
     destination_playlist_id = dest_playlist['id']  # TODO: Make this actually work
-    return sync_playlists(token, source_playlist_ids, destination_playlist_id)
+    sync_playlists(token, source_playlist_ids, destination_playlist_id)
+    return destination_playlist_id
 
 
 def get_username_from_access_token(access_token):
