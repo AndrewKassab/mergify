@@ -28,3 +28,8 @@ jobs:
       run: |
         cd app
         python -m unittest discover ./tests
+      env:
+        MERGIFY_CLIENT_ID: ${{secrets.CLIENT_ID}}
+        MERGIFY_CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
+        MERGIFY_REDIRECT_URI: ${{secrets.REDIRECT_URI}}
+        MERGIFY_TEST_REFRESH_TOKEN: ${{secrets.TEST_REFRESH_TOKEN}}
