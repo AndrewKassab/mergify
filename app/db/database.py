@@ -5,9 +5,6 @@ import time
 token_life = 3000
 db_path = os.path.abspath(os.path.dirname(__file__) + "/database.db")
 
-seeded_username = os.environ.get('MERGIFY_SEED_USERNAME')
-seeded_token = os.environ.get('MERGIFY_SEED_TOKEN')
-
 
 class MergifyDataBase:
 
@@ -15,12 +12,10 @@ class MergifyDataBase:
         self.path = path
         if not os.path.exists(path):
             con = sql.connect(path)
-            con.execute('CREATE TABLE users (username TEXT PRIMARY_KEY UNIQUE, access_token TEXT, '
-                        'expiration_time INTEGER, refresh_token TEXT)')
-            if seeded_username and seeded_token:
-                cur = con.cursor()
-                cur.execute("INSERT INTO users VALUES ('%s','%s','%d','%s')" % (seeded_username,
-                                                                                seeded_token, 1, seeded_token))
+            con.execute('CREATE TABLE Users (user_id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY, '
+                        'username TEXT UNIQUE)')
+            con.execute('CREATE TABLE Tokens (access_token TEXT, expiration_time INTEGER, refresh_token TEXT, '
+                        'user_id INTEGER, PRIMARY KEY(access_token), FOREIGN KEY (user_id) REFERENCES Users(user_id))')
             con.commit()
             con.close()
 
