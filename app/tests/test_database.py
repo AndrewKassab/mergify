@@ -21,8 +21,9 @@ class DatabaseTest(unittest.TestCase):
         con = sql.connect(db_path)
         cur = con.cursor()
         expiration_time = time.time() + token_life
-        cur.execute("INSERT INTO users VALUES ('%s','%s','%d','%s')" % (cls.username, cls.access_token,
-                                                                        expiration_time, cls.refresh_token))
+        cur.execute("INSERT INTO Users (username) VALUES ('%s')" % cls.username)
+        cur.execute("INSERT INTO Tokens (access_token, expiration_time, refresh_token) VALUES ('%s','%s','%s')"
+                    % (cls.access_token, expiration_time, cls.refresh_token))
         con.commit()
         con.close()
 
@@ -33,12 +34,16 @@ class DatabaseTest(unittest.TestCase):
         self.db.add_new_entry_to_users(test_username, test_access_token, test_refresh_token)
         con = sql.connect(db_path)
         cur = con.cursor()
-        cur.execute("SELECT * FROM users WHERE username = '%s'" % test_username)
+        cur.execute("SELECT * FROM Users WHERE username = '%s'" % test_username)
         rows = cur.fetchall()
+        user_id = rows[0][0]
+        items = [rows[0][1]]
+        cur.execute("SELECT * FROM Tokens WHERE user_id = '%s'" % user_id)
+        rows = cur.fetchall()
+        items.extend([rows[0][1], rows[0][3]])
         con.close()
-        expected_row = [test_username, test_access_token, test_refresh_token]
-        actual_row = [rows[0][0], rows[0][1], rows[0][3]]
-        self.assertEqual(expected_row, actual_row)
+        expected_items = [test_username, test_access_token, test_refresh_token]
+        self.assertEqual(expected_items, items)
 
     def test_get_access_token_for_user(self):
         access_token = self.db.get_access_token_for_user(self.username)
