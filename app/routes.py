@@ -12,6 +12,7 @@ def spotify_auth():
     return redirect(get_oauth_url())
 
 
+# TODO: Rewrite and make to /login
 @app.route('/callback/', methods=['GET'])
 def callback():
     if 'error' in request.args or 'code' not in request.args:
@@ -31,31 +32,23 @@ def callback():
     return response
 
 
-@app.route('/logout', methods=['GET'])
-def logout():
-    response = redirect(url_for('login'))
-    for cookie in request.cookies:
-        response.set_cookie(cookie, '', expires=0)
-    return response
-
-
 @app.route('/merge', methods=['POST'])
 def merge_playlists():
     code = 201
     payload = {}
+    auth_token = request.headers.get('auth_token')
+    if not is_auth_token_valid(auth_token):
+        code = 401
+        return jsonify(payload), code
+    user_id = db.get_user_id_from_auth_token(auth_token)
     try:
         source_playlist_ids = [request.form['source_playlists']]
         destination_playlist = request.form['destination_playlist']
-        username = request.form['username']
         to_new = request.form['to_new']
-        token = request.headers['access_token']
-        if not is_access_token_valid(token, username):
-            code = 401
-            payload['error_detail'] = 'Invalid Authorization'
-            return jsonify(payload), code
-        if is_users_access_token_expired(username):
-            token = refresh_and_update_access_token_for_user(username)
-            payload['new_token'] = token
+        if is_users_access_token_expired(user_id):
+            token = refresh_and_update_access_token_for_user(user_id)
+        else:
+            token = db.get_access_token_for_user(user_id)
         if to_new:
             merge_to_new_playlist(source_playlist_ids, destination_playlist)
         else:
@@ -70,26 +63,6 @@ def merge_playlists():
     return payload, code
 
 
-# For Testing
-@app.route('/refresh', methods=['POST'])
-def refresh_token():
-    payload = {}
-    username = request.form['username']
-    token = request.headers['access_token']
-    if not is_access_token_valid(token, username):
-        code = 401
-        payload['error_detail'] = 'Invalid Authorization'
-        return jsonify(payload), code
-    token = refresh_and_update_access_token_for_user(username)
-    payload['access_token'] = token
-    return payload, 201
-
-
-def is_logged_in(user):
-    if 'auth_code' in user.cookies:
-        return True
-    return False
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
+@app.route('/playlists', methods=['GET'])
+def get_user_playlists():
+    username = request.form[]

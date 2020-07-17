@@ -13,7 +13,7 @@ class MergifyDataBase:
         if not os.path.exists(path):
             con = sql.connect(path)
             con.execute('CREATE TABLE Users (user_id INTEGER NOT NULL PRIMARY KEY, '
-                        'username TEXT UNIQUE)')
+                        'username TEXT UNIQUE, auth_token TEXT)')
             con.execute('CREATE TABLE Tokens (user_id INTEGER NOT NULL, access_token TEXT, expiration_time INTEGER, '
                         'refresh_token TEXT, PRIMARY KEY(user_id), FOREIGN KEY (user_id) REFERENCES Users(user_id))')
             con.commit()
@@ -29,26 +29,23 @@ class MergifyDataBase:
             return -1
         return rows[0][0]
 
-    def get_user_id_for_user(self, username):
+    def get_user_id_from_auth_token(self, auth_token):
         con = sql.connect(self.path)
         cur = con.cursor()
-        cur.execute("SELECT user_id FROM Users WHERE username = '%s'" % username)
+        cur.execute("SELECT user_id FROM Users WHERE auth_token = '%s'" % auth_token)
         rows = cur.fetchall()
         con.close()
         if len(rows) <= 0:
             return -1
         return rows[0][0]
 
-    def get_access_token_for_user(self, username):
-        user_id = self.get_user_id_for_user(username)
+    def get_access_token_for_user(self, user_id):
         return self.__get_tokens_column('access_token', user_id)
 
-    def get_refresh_token_for_user(self, username):
-        user_id = self.get_user_id_for_user(username)
+    def get_refresh_token_for_user(self, user_id):
         return self.__get_tokens_column('refresh_token', user_id)
 
-    def get_expiration_time_for_user(self, username):
-        user_id = self.get_user_id_for_user(username)
+    def get_expiration_time_for_user(self, user_id):
         return self.__get_tokens_column('expiration_time', user_id)
 
     def __update_tokens_column(self, user_id, column_name, new_value):
@@ -63,14 +60,12 @@ class MergifyDataBase:
         con.commit()
         con.close()
 
-    def update_access_token_for_user(self, username, new_access_token):
-        user_id = self.get_user_id_for_user(username)
+    def update_access_token_for_user(self, user_id, new_access_token):
         expiration_time = time.time() + token_life
         self.__update_tokens_column(user_id, 'access_token', new_access_token)
         self.__update_tokens_column(user_id, 'expiration_time', expiration_time)
 
-    def update_refresh_token_for_user(self, username, new_refresh_token):
-        user_id = self.get_user_id_for_user(username)
+    def update_refresh_token_for_user(self, user_id, new_refresh_token):
         self.__update_tokens_column(user_id, 'refresh_token', new_refresh_token)
 
     def does_user_exist(self, username):
@@ -79,15 +74,22 @@ class MergifyDataBase:
         cur.execute("SELECT * FROM Users WHERE username = '%s'" % username)
         rows = cur.fetchall()
         con.close()
-        if len(rows) <= 0:
-            return False
-        return True
+        return len(rows) > 0
 
-    def add_new_entry_to_users(self, username, access_token, refresh_token):
+    def does_auth_token_exist(self, auth_token):
+        con = sql.connect(self.path)
+        cur = con.cursor()
+        cur.execute("SELECT * FROM Users WHERE auth_token = '%s'" % auth_token)
+        rows = cur.fetchall()
+        con.close()
+        return len(rows) > 0
+
+
+    def add_new_entry_to_users(self, username, auth_token, access_token, refresh_token):
         con = sql.connect(self.path)
         expiration_time = time.time() + token_life
         cur = con.cursor()
-        cur.execute("INSERT INTO Users (username) VALUES ('%s')" % username)
+        cur.execute("INSERT INTO Users (username, auth_token) VALUES ('%s','%s')" % (username, auth_token))
         cur.execute("INSERT INTO Tokens (access_token, expiration_time, refresh_token) VALUES "
                     "('%s','%s','%s')" % (access_token, expiration_time, refresh_token))
         con.commit()
