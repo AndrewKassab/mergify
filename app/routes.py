@@ -39,18 +39,19 @@ def merge_playlists():
     auth_token = request.headers.get('auth_token')
     if not is_auth_token_valid(auth_token):
         code = 401
+        payload['error_detail'] = 'Invalid Authorization'
         return jsonify(payload), code
     user_id = db.get_user_id_from_auth_token(auth_token)
+    if is_users_access_token_expired(user_id):
+        token = refresh_and_update_access_token_for_user(user_id)
+    else:
+        token = db.get_access_token_for_user(user_id)
     try:
         source_playlist_ids = [request.form['source_playlists']]
         destination_playlist = request.form['destination_playlist']
         to_new = request.form['to_new']
-        if is_users_access_token_expired(user_id):
-            token = refresh_and_update_access_token_for_user(user_id)
-        else:
-            token = db.get_access_token_for_user(user_id)
         if to_new:
-            merge_to_new_playlist(source_playlist_ids, destination_playlist)
+            merge_to_new_playlist(token, source_playlist_ids, destination_playlist)
         else:
             sync_playlists(token, source_playlist_ids, destination_playlist)
     except Exception as e:
@@ -64,5 +65,16 @@ def merge_playlists():
 
 
 @app.route('/playlists', methods=['GET'])
-def get_user_playlists():
-    username = request.form[]
+def get_playlists():
+    auth_token = request.headers.get('auth_token')
+    if not is_auth_token_valid(auth_token):
+        code = 401
+        payload = {'error_detail': 'Invalid Authorization'}
+        return jsonify(payload), code
+    user_id = db.get_user_id_from_auth_token(auth_token)
+    if is_users_access_token_expired(user_id):
+        token = refresh_and_update_access_token_for_user(user_id)
+    else:
+        token = db.get_access_token_for_user(user_id)
+    playlists = get_user_playlists(token)
+    return jsonify(playlists), 200
