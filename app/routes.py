@@ -1,4 +1,4 @@
-from flask import request, redirect, url_for, jsonify, Blueprint
+from flask import request, redirect, jsonify, Blueprint
 from spotify import *
 from spotipy import SpotifyException
 from token_util import *
