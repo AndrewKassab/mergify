@@ -1,0 +1,54 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html, body, main {
+    height: 100%;
+    width: 100%;
+}
+
+header {
+    margin-left: 1%;
+    margin-right: 1%;
+    margin-top: 10px; 
+    height: 13%;
+    text-align: center;
+    background-color: aquamarine;
+    font-size: larger;
+    border-radius: 10px;
+    line-height: 60px;
+}
+
+#source {
+    width: 72%;
+    height: 70%;
+    float: left;
+    background-color: green;
+}
+
+#destination {
+    width: 28%;
+    height: 70%;
+    float: right;
+    background-color: red;
+}
+
+.select_field {
+    width: 40%;
+    height: 100%;
+}
+
+#select_playlists {
+    background-color: blue;
+    float: left;
+}
+
+#playlist_selections {
+    background-color: orange;
+    float: right;
+}
+
+.center {
+    text-align: center;
+}

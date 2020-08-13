@@ -15,7 +15,6 @@ def spotify_auth():
 @app.route('/login', methods=['POST'])
 def login():
     code = 201
-
     try:
         auth_code = request.form['auth_code']
         token_info = get_token_info_from_code(auth_code)
