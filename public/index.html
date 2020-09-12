@@ -4,33 +4,53 @@
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
         <title>Mergify</title>
-        <link rel="stylesheet" href="main.css"></style>
+        <link rel="stylesheet" href="main.css">
     </head>
     <body>
         <header>
-            <h1>Mergify</h1> 
-            <p>Merge your Spotify playlists</p>
+            <h1 id="title">Mergify</h1> 
+            <p id="description">Merge your Spotify playlists</p>
         </header>
         <main>
-            <div id="source">
-                <div id="select_playlists" class="select_field">
-
-                </div>
-                <div id="transfer_buttons">
-                    
-                </div>
-                <div id="playlist_selections" class="select_field">
-
-                </div>
+            <div id="select_playlists" class="select_field">
+                <h3 class="center">Source Playlists</h3>
+                <select id="sources" class="selections" multiple>
+                    <option value="one">One</option>
+                    <option value="two">Two</option>
+                    <option value="three">Three</option>
+                    <option value="four">Four</option>
+                    <option value="five">Five</option>
+                </select>
+            </div>
+            <div id="transfer_buttons">
+                <button id="right" class="transfer">=></button>
+                <button id="left" class="transfer"><=</button>
+            </div>
+            <div id="playlist_selections" class="select_field">
+                <h3 class="center">Source Selections</h3>
+                <select id="sources" class="selections" multiple>
+                    <option value="one">One</option>
+                    <option value="two">Two</option>
+                    <option value="three">Three</option>
+                    <option value="four">Four</option>
+                    <option value="five">Five</option>
+                </select>
             </div>
             <div id="destination">
-
-            </div>
-            <div id="confirm">
+                <h3 class="center">Destination Playlist</h3>
+                <p id="instructions">Select a destination playlist or enter 
+                    a new playlist name to create one.</p>
+                <input type="text" list="destination_playlists" />
+                <datalist id="destination_playlists">
+                    <option>Volvo</option>
+                    <option>Saab</option>
+                    <option>Mercedes</option>
+                    <option>Audi</option>
+                </datalist>
             </div>
         </main>
-        <footer>
-
-        </footer>
+        <div id="merge">
+            <button id="confirm">MERGE</button>
+        </div>
     </body>
 </html>
