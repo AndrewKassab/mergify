@@ -15,6 +15,7 @@ xhr.onreadystatechange = function() {
             newOption.value = key;
             newOption.innerHTML = response[key];
             sourceSelectField.appendChild(newOption);
+            destinationDataList.appendChild(newOption); // TODO: May need to clone
         }
     }
 }
