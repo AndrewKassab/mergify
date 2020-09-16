@@ -1,22 +1,23 @@
-from flask import request, redirect, jsonify, Blueprint
+from flask import request, redirect, jsonify, Blueprint, make_response
+from flask_cors import CORS, cross_origin
 from spotify import *
 from spotipy import SpotifyException
 from token_util import *
 from db.database import db
 
 app = Blueprint('routes', __name__)
+CORS(app)
 
-
+@cross_origin
 @app.route('/auth', methods=['GET'])
 def spotify_auth():
     return redirect(get_oauth_url())
 
 
-@app.route('/login', methods=['POST'])
+@app.route('/callback/', methods=['GET'])
 def login():
-    code = 201
     try:
-        auth_code = request.form['auth_code']
+        auth_code = request.args.get('code')
         token_info = get_token_info_from_code(auth_code)
     except Exception as e:
         payload = {}
@@ -32,13 +33,16 @@ def login():
     refresh_token = token_info['refresh_token']
     username = get_username_from_access_token(access_token)
     if db.does_user_exist(username):
-        user_id = db.get_user_id_from_username()
+        user_id = db.get_user_id_from_username(username)
         db.update_auth_token_for_user(user_id, auth_code)
         db.update_access_token_for_user(user_id, access_token)
         db.update_refresh_token_for_user(user_id, refresh_token)
     else:
         db.add_new_entry_to_users(username, auth_code, access_token, refresh_token)
-    return code
+    res = make_response(redirect('http://localhost:5500/public/index.html'))
+    res.status = '200'
+    res.set_cookie('auth_token', auth_code)
+    return res
 
 
 @app.route('/merge', methods=['POST'])
