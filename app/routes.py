@@ -5,6 +5,7 @@ from spotipy import SpotifyException
 from token_util import *
 from db.database import db
 
+# TODO: Remove CORS stuff
 app = Blueprint('routes', __name__)
 CORS(app)
 
@@ -39,7 +40,7 @@ def login():
         db.update_refresh_token_for_user(user_id, refresh_token)
     else:
         db.add_new_entry_to_users(username, auth_code, access_token, refresh_token)
-    res = make_response(redirect('http://localhost:5500/public/index.html'))
+    res = make_response(redirect('http://localhost:5500/index.html'))
     res.status = '200'
     res.set_cookie('auth_token', auth_code)
     return res
@@ -81,7 +82,8 @@ def merge_playlists():
 
 @app.route('/playlists', methods=['GET'])
 def get_playlists():
-    auth_token = request.headers.get('auth_token')
+    auth_token = request.cookies.get('auth_token')
+    print(auth_token)
     if not is_auth_token_valid(auth_token):
         code = 401
         payload = {'error_detail': 'Invalid Authorization'}

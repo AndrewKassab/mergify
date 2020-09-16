@@ -95,3 +95,15 @@ main {
     width: 25%;
     height: 30%;
 }
+
+#instructions {
+    display: inline-block;
+    word-wrap: break-word;
+    width: 200px;
+    text-align: center;
+    margin-top: 10%;
+}
+
+#destination_playlists {
+    margin: 0 auto;
+}
