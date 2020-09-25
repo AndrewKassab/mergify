@@ -65,7 +65,6 @@ function merge() {
     data['source_playlists'] = sourcePlaylists;
     data['destination_playlist'] = destinationPlaylist;
     data['to_new'] = isNewPlaylist;
-    console.log(data);
 
     // TODO: Display some loading / timed modal that dissapears once the request is done
     request.open('POST', 'http://localhost:5000/merge');
