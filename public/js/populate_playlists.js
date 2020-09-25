@@ -11,11 +11,14 @@ xhr.onreadystatechange = function() {
         }
         var response = JSON.parse(this.responseText);
         for (var key in response){
-            let newOption = document.createElement('option');
-            newOption.value = key;
-            newOption.innerHTML = response[key];
-            sourceSelectField.appendChild(newOption);
-            destinationDataList.appendChild(newOption); // TODO: May need to clone
+            let newOptionSelect = document.createElement('option');
+            newOptionSelect.value = key;
+            newOptionSelect.innerHTML = response[key];
+            sourceSelectField.appendChild(newOptionSelect);
+            let newOptionDataList = document.createElement('option');
+            newOptionDataList.setAttribute("data", key);
+            newOptionDataList.innerHTML = response[key];
+            destinationDataList.appendChild(newOptionDataList);
         }
     }
 }
