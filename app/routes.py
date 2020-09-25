@@ -1,18 +1,17 @@
 from flask import request, redirect, jsonify, Blueprint, make_response
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 from spotify import *
 from spotipy import SpotifyException
 from token_util import *
 from db.database import db
 
-# TODO: Remove CORS stuff
+# TODO: Remove CORS stuff, for development only
 app = Blueprint('routes', __name__)
-CORS(app)
+CORS(app, supports_credentials=True)
 
-@cross_origin
 @app.route('/auth', methods=['GET'])
 def spotify_auth():
-    return redirect(get_oauth_url())
+    return get_oauth_url(), 200
 
 
 @app.route('/callback/', methods=['GET'])
@@ -83,7 +82,6 @@ def merge_playlists():
 @app.route('/playlists', methods=['GET'])
 def get_playlists():
     auth_token = request.cookies.get('auth_token')
-    print(auth_token)
     if not is_auth_token_valid(auth_token):
         code = 401
         payload = {'error_detail': 'Invalid Authorization'}

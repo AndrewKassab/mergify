@@ -6,7 +6,7 @@ let xhr = new XMLHttpRequest();
 xhr.onreadystatechange = function() {
     if (this.readyState == XMLHttpRequest.DONE){
         // TODO: Error handling on page, output message / redirect to login?
-        if (xhr.status != 200){
+        if (xhr.status != 200) {
             return;
         }
         var response = JSON.parse(this.responseText);
@@ -21,4 +21,5 @@ xhr.onreadystatechange = function() {
 }
 
 xhr.open('GET', 'http://localhost:5000/playlists');
+xhr.withCredentials = true; // TODO: DEV ONLY
 xhr.send();
