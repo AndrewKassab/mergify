@@ -41,6 +41,7 @@ def refresh_access_token(refresh_token):
     return spoauth.refresh_access_token(refresh_token)
 
 
+# TODO: Only return playlists belonging to that user
 def get_user_playlists(token):
     sp = spotipy.Spotify(auth=token)
     username = sp.me()['id']

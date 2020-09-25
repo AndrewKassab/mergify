@@ -50,7 +50,7 @@ def merge_playlists():
     code = 201
     payload = {}
 
-    auth_token = request.headers.get('auth_token')
+    auth_token = request.cookies.get('auth_token')
     if not is_auth_token_valid(auth_token):
         code = 401
         payload['error_detail'] = 'Invalid Authorization'
@@ -62,13 +62,14 @@ def merge_playlists():
         token = db.get_access_token_for_user(user_id)
 
     try:
-        source_playlist_ids = [request.form['source_playlists']]
-        destination_playlist = request.form['destination_playlist']
-        to_new = request.form['to_new']
+        source_playlist_ids = request.json['source_playlists']
+        destination_playlist = request.json['destination_playlist']
+        to_new = request.json['to_new']
         if to_new:
             merge_to_new_playlist(token, source_playlist_ids, destination_playlist)
         else:
             sync_playlists(token, source_playlist_ids, destination_playlist)
+            print('here')
     except Exception as e:
         if type(e) == SpotifyException:
             code = e.http_status

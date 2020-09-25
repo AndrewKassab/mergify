@@ -3,8 +3,10 @@ let destinationDataList = document.getElementById('destination_playlists');
 
 let xhr = new XMLHttpRequest();
 
+// TODO: Some sort of page load while this request is completed
+
 xhr.onreadystatechange = function() {
-    if (this.readyState == XMLHttpRequest.DONE){
+    if (this.readyState == XMLHttpRequest.DONE) {
         // TODO: Error handling on page, output message / redirect to login?
         if (xhr.status != 200) {
             return;
