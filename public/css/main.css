@@ -36,7 +36,6 @@ main {
     width: 28%;
     height: 100%;
     float: right;
-    background-color: red;
 }
 
 .select_field {
@@ -46,18 +45,15 @@ main {
 }
 
 #select_playlists {
-    background-color: blue;
     float: left;
 }
 
 #transfer_buttons {
     width: 20%;
-    background-color: green;
     text-align: center;
 }
 
 #playlist_selections {
-    background-color: orange;
     float: right;
 }
 
@@ -72,7 +68,7 @@ main {
     text-align: center;
 }
 
-.selections {
+.select {
     margin: auto;
     margin-top: 10%;
     width: 70%;
@@ -106,4 +102,9 @@ main {
 
 #destination_playlists {
     margin: 0 auto;
+}
+
+#label {
+    text-align: center;
+    margin-top: 10%;
 }

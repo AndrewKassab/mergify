@@ -10,7 +10,7 @@ xhr.onreadystatechange = function() {
             return;
         }
         var response = JSON.parse(this.responseText);
-        for (var key in response){
+        for (var key in response) {
             let newOptionSelect = document.createElement('option');
             newOptionSelect.value = key;
             newOptionSelect.innerHTML = response[key];
@@ -25,4 +25,4 @@ xhr.onreadystatechange = function() {
 
 xhr.open('GET', 'http://localhost:5000/playlists');
 xhr.withCredentials = true; // TODO: DEV ONLY
-xhr.send();
+xhr.send()
