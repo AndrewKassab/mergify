@@ -18,4 +18,5 @@ You must export the following variables into your environment
 
 - After that, go ahead and execute `flask run` from within the app directory
 
-- You should now be able to visit http://localhost:5000/
+- Open `login.html` with VSCode Live Server 
+
