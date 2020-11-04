@@ -37,6 +37,9 @@ function getMatchingOptionData(playlistName) {
 }
 
 function merge() {
+    noDestError.style.display = "none";
+    noSrcError.style.display = "none";
+
     var data = {};
     var error = false;
     var isNewPlaylist = false;

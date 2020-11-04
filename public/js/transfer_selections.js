@@ -2,6 +2,7 @@ var confirmedSources = document.getElementById('selections');
 var unconfirmedSources = document.getElementById('sources');
 var moveToConfirmedButton = document.getElementById('right');
 var moveToUnconfirmedButton = document.getElementById('left');
+let noSrcErrMsg = document.getElementById('no_src_err');
 
 function getSelectValues(selectField) {
     var result = [];
@@ -13,6 +14,10 @@ function getSelectValues(selectField) {
         if (opt.selected) {
             result.push({"value": opt.value, "innerHTML": opt.innerHTML, "index": i});
         }
+    }
+    if (result.length > 0) {
+        noSrcErrMsg.style.display = "none";
+
     }
     return result;
 }
