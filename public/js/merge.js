@@ -2,6 +2,8 @@ let sourceSelections = document.getElementById('selections');
 let destDataList = document.getElementById('destination_playlists');
 let mergeButton = document.getElementById('confirm');
 let destinationInput = document.getElementById('destination_selection');
+let noDestError = document.getElementById('no_dest_err');
+let noSrcError = document.getElementById('no_src_err');
 
 var request = new XMLHttpRequest();
 
@@ -42,7 +44,7 @@ function merge() {
     var sourcePlaylists = getSelectedSources();
 
     if (!destinationPlaylist) {
-        // TODO Handle missing destination error
+        noDestError.style.display = "";
         error = true;
     } else {
         var id = getMatchingOptionData(destinationPlaylist);
@@ -55,7 +57,7 @@ function merge() {
 
     if (sourcePlaylists.length == 0) {
         error = true;
-        // TODO: Handle missing sources error
+        noSrcError.style.display = "";
     }
 
     if (error) {

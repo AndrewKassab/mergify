@@ -98,13 +98,27 @@ main {
     width: 200px;
     text-align: center;
     margin-top: 10%;
+    margin-left: 14%;
 }
 
 #destination_playlists {
     margin: 0 auto;
 }
 
-#label {
+.label {
     text-align: center;
+    margin-top: 5%;
+}
+
+.error {
+    color: red;
+    margin-top: 3%;
+    text-align: center;
+}
+
+#destination_selection {
+    display: block;
+    margin: 0 auto;
     margin-top: 10%;
+    font-size: larger;
 }
