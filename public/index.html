@@ -15,7 +15,7 @@
             <h1 id="title">Mergify</h1> 
             <p id="description">Merge your Spotify playlists</p>
         </header>
-        <main>
+        <div id="source">
             <div id="select_playlists" class="select_field">
                 <h3 class="label">Source Playlists</h3>
                 <select id="sources" class="select" multiple>
@@ -26,23 +26,27 @@
                 <button id="left" class="transfer"><=</button>
             </div>
             <div id="playlist_selections" class="select_field">
-                <h3 class="label">Source Selections</h3>
+                <h3 class="label">Selections</h3>
                 <p id="no_src_err" class="error" style="display: none;">Please select at least 1 playlist</p>
                 <select id="selections" class="select" multiple>
                 </select>
             </div>
-            <div id="destination">
-                <h3 class="label">Destination Playlist</h3>
-                <p id="no_dest_err" class="error" style="display: none;">Please select a destination</p>
-                <p id="instructions">Select a destination playlist or enter 
-                    a new playlist name to create one.</p>
-                <input id="destination_selection" type="text" list="destination_playlists" />
-                <datalist id="destination_playlists">
-                </datalist>
-            </div>
-        </main>
+        </div>
         <div id="merge">
+            <h3 class="label">Destination Playlist</h3>
+            <p id="no_dest_err" class="error" style="display: none;">Please select a destination</p>
+            <p id="instructions">Select a destination playlist or enter 
+                a new playlist name to create one.</p>
+            <input id="destination_selection" type="text" list="destination_playlists" />
+            <datalist id="destination_playlists">
+            </datalist>
             <button id="confirm">MERGE</button>
+        </div>
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <p>Hello</p>
+                <div class="loader"></div>
+            </div>
         </div>
     </body>
 </html>
