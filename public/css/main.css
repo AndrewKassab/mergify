@@ -177,24 +177,24 @@ header {
     overflow: hidden;
   }
   
-  /* Modal Content */
-  .modal-content {
-    background-color: teal;
+/* Modal Content */
+.modal-content {
+background-color: teal;
+margin: auto;
+padding: 20px;
+width: 100%;
+height: 100%;
+text-align: center;
+}
+
+.modal_message {
+    font-size: 30px;
+}
+
+#closemodal {
+    position: relative;
     margin: auto;
-    padding: 20px;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-  }
-
-  .modal_message {
-      font-size: 30px;
-  }
-
-  #closemodal {
-      position: relative;
-      margin: auto;
-      top: 50%;
-      width: 20%;
-      height: 10%;
-  }
+    top: 50%;
+    width: 20%;
+    height: 10%;
+}
