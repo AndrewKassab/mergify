@@ -4,15 +4,25 @@ let mergeButton = document.getElementById('confirm');
 let destinationInput = document.getElementById('destination_selection');
 let noDestError = document.getElementById('no_dest_err');
 let noSrcError = document.getElementById('no_src_err');
+let loadmodal = document.getElementById('modal');
+let loadWheel = document.getElementById('loader');
+let modalSuccessMessage = document.getElementById('success_message');
+let failedMergeError = document.getElementById('merge_error');
+let pleaseWaitMessage = document.getElementById('pleasewait');
+let closeButton = document.getElementById('closemodal');
 
 var request = new XMLHttpRequest();
 
 request.onreadystatechange = function() {
     if (this.readyState == XMLHttpRequest.DONE) {
-        if (xhr.status != 201) {
-            // TODO: error handle
+        loadWheel.style.display = "none";
+        closeButton.style.display = "";
+        pleaseWaitMessage.style.display = "none";
+        if (request.status == 201) {
+            modalSuccessMessage.style.display = "";
+        } else {
+            failedMergeError.style.display = "";
         }
-        // TODO: Otherwise, output success
     }
 }
 
@@ -71,11 +81,15 @@ function merge() {
     data['destination_playlist'] = destinationPlaylist;
     data['to_new'] = isNewPlaylist;
 
-    // TODO: Display some loading / timed modal that dissapears once the request is done
     request.open('POST', 'http://localhost:5000/merge');
     request.withCredentials = true; // TODO: DEV ONLY
     request.setRequestHeader('Content-Type', 'application/json');
     request.send(JSON.stringify(data));
+    modal.style.display = "";
 }
 
 mergeButton.addEventListener('click', merge);
+closeButton.addEventListener('click', () => {
+    modal.style.display = "none";
+    location.reload();
+});

@@ -42,10 +42,13 @@
             </datalist>
             <button id="confirm">MERGE</button>
         </div>
-        <div id="modal" class="modal">
+        <div id="modal" class="modal" style="display: none;">
             <div class="modal-content">
-                <p>Hello</p>
-                <div class="loader"></div>
+                <p id="pleasewait" class="modal_message">Please wait while your playlist is being merged...</p>
+                <p id="merge_error" class="error modal_message" style="display: none;">An error occurred and your playlists were not merged. Please try again.</p>
+                <p id="success_message" class="modal_message" style="display: none;">Success, check Spotify.</p>
+                <div id="loader" class="loader"></div>
+                <button id="closemodal" style="display: none;">Close</button>
             </div>
         </div>
     </body>
