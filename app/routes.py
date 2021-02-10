@@ -40,7 +40,6 @@ def login():
     else:
         db.add_new_entry_to_users(username, auth_code, access_token, refresh_token)
     res = make_response(redirect('http://localhost:5500/index.html'))
-    res.status = '200'
     res.set_cookie('auth_token', auth_code)
     return res
 
