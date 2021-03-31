@@ -116,8 +116,4 @@ class MergifyDataBase:
         con.close()
 
 
-# TODO: DEV ONLY
-if os.path.exists(db_path):
-    os.remove(db_path)
-
 db = MergifyDataBase(db_path)

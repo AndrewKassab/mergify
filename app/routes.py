@@ -1,13 +1,10 @@
 from flask import request, redirect, jsonify, Blueprint, make_response
-from flask_cors import CORS
 from spotify import *
 from spotipy import SpotifyException
 from token_util import *
 from db.database import db
 
-# TODO: Remove CORS stuff, for development only
 app = Blueprint('routes', __name__)
-CORS(app, supports_credentials=True)
 
 @app.route('/auth', methods=['GET'])
 def spotify_auth():
