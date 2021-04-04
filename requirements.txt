@@ -1,3 +1,4 @@
 spotipy
 flask
 flask_cors
+python-dotenv

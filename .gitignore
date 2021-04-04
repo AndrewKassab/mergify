@@ -5,3 +5,4 @@ __pycache__/
 *.json
 *.db
 .pytest_cache
+*.env
