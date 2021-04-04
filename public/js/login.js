@@ -12,6 +12,6 @@ loginButton.addEventListener('click', function() {
             window.location.href = this.responseText;
         }
     }
-    xhr.open("GET", "http://138.68.230.195/auth");
+    xhr.open("GET", "http://138.68.230.195/api/auth");
     xhr.send();
 });

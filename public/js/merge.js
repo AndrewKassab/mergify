@@ -81,8 +81,7 @@ function merge() {
     data['destination_playlist'] = destinationPlaylist;
     data['to_new'] = isNewPlaylist;
 
-    request.open('POST', 'http://localhost:5000/merge');
-    request.withCredentials = true; // TODO: DEV ONLY
+    request.open('POST', 'http://138.68.230.195/api/merge');
     request.setRequestHeader('Content-Type', 'application/json');
     request.send(JSON.stringify(data));
     modal.style.display = "";

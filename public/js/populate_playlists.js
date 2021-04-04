@@ -25,6 +25,5 @@ xhr.onreadystatechange = function() {
     }
 }
 
-xhr.open('GET', 'http://localhost:5000/playlists');
-xhr.withCredentials = true; // TODO: DEV ONLY
+xhr.open('GET', 'http://138.68.230.195/api/playlists');
 xhr.send()
