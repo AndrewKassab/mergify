@@ -36,7 +36,7 @@ def login():
         db.update_refresh_token_for_user(user_id, refresh_token)
     else:
         db.add_new_entry_to_users(username, auth_code, access_token, refresh_token)
-    res = make_response(redirect('http://localhost:5500/index.html'))
+    res = make_response(redirect('http://138.68.230.195/index.html'))
     res.set_cookie('auth_token', auth_code)
     return res
 
@@ -65,7 +65,6 @@ def merge_playlists():
             merge_to_new_playlist(token, source_playlist_ids, destination_playlist)
         else:
             sync_playlists(token, source_playlist_ids, destination_playlist)
-            print('here')
     except Exception as e:
         if type(e) == SpotifyException:
             code = e.http_status
