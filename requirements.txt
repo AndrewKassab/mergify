@@ -2,3 +2,4 @@ spotipy
 flask
 flask_cors
 mysql-connector-python
+python-dotenv
