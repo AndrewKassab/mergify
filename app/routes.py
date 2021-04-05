@@ -3,6 +3,11 @@ from spotify import *
 from spotipy import SpotifyException
 from token_util import *
 from db.database import db
+from dotenv import load_dotenv
+
+dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+load_dotenv(dotenv_path)
+base_url = os.environ['BASE_URL']
 
 app = Blueprint('routes', __name__)
 
@@ -36,7 +41,7 @@ def login():
         db.update_refresh_token_for_user(user_id, refresh_token)
     else:
         db.add_new_entry_to_users(username, auth_code, access_token, refresh_token)
-    res = make_response(redirect('http://138.68.230.195/index.html'))
+    res = make_response(redirect(base_url + '/index.html'))
     res.set_cookie('auth_token', auth_code)
     return res
 
