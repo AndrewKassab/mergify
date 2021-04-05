@@ -25,5 +25,6 @@ xhr.onreadystatechange = function() {
     }
 }
 
-xhr.open('GET', 'http://138.68.230.195/api/playlists');
+// TODO: Update to just grab current URL then add endpoint
+xhr.open('GET', 'http://24.25.205.133/api/playlists');
 xhr.send()

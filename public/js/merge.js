@@ -81,7 +81,8 @@ function merge() {
     data['destination_playlist'] = destinationPlaylist;
     data['to_new'] = isNewPlaylist;
 
-    request.open('POST', 'http://138.68.230.195/api/merge');
+    // TODO: Update to just use current url then add endpoint
+    request.open('POST', 'http://24.25.205.133/api/merge');
     request.setRequestHeader('Content-Type', 'application/json');
     request.send(JSON.stringify(data));
     modal.style.display = "";
