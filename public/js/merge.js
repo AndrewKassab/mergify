@@ -81,6 +81,7 @@ function merge() {
     data['destination_playlist'] = destinationPlaylist;
     data['to_new'] = isNewPlaylist;
 
+    // TODO: Update to just use current URL then add endpoint
     request.open('POST', 'http://localhost:5000/merge');
     request.withCredentials = true; // TODO: DEV ONLY
     request.setRequestHeader('Content-Type', 'application/json');

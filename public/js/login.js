@@ -12,6 +12,7 @@ loginButton.addEventListener('click', function() {
             window.location.href = this.responseText;
         }
     }
+    // TODO: Update to just use current URL then add endpoint
     xhr.open("GET", "http://localhost:5000/auth");
     xhr.send();
 });
