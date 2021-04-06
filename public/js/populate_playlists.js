@@ -1,6 +1,10 @@
 let sourceSelectField = document.getElementById('sources');
 let destinationDataList = document.getElementById('destination_playlists');
 
+var url = window.location.href;
+var arr = url.split('/');
+var domain = arr[0] + '//' + arr[2];
+
 let xhr = new XMLHttpRequest();
 
 xhr.onreadystatechange = function() {
@@ -23,6 +27,5 @@ xhr.onreadystatechange = function() {
     }
 }
 
-// TODO: Update to just grab current URL then add endpoint
-xhr.open('GET', 'http://24.25.205.133/api/playlists');
+xhr.open('GET', domain + '/api/playlists');
 xhr.send()

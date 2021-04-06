@@ -13,6 +13,10 @@ let closeButton = document.getElementById('closemodal');
 
 var request = new XMLHttpRequest();
 
+var url = window.location.href;
+var arr = url.split('/');
+var domain = arr[0] + '//' + arr[2];
+
 request.onreadystatechange = function() {
     if (this.readyState == XMLHttpRequest.DONE) {
         loadWheel.style.display = "none";
@@ -81,8 +85,7 @@ function merge() {
     data['destination_playlist'] = destinationPlaylist;
     data['to_new'] = isNewPlaylist;
 
-    // TODO: Update to just use current url then add endpoint
-    request.open('POST', 'http://24.25.205.133/api/merge');
+    request.open('POST', domain + '/api/merge');
     request.setRequestHeader('Content-Type', 'application/json');
     request.send(JSON.stringify(data));
     modal.style.display = "";

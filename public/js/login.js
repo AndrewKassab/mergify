@@ -1,5 +1,9 @@
 let loginButton = document.getElementById('login');
 
+var url = window.location.href;
+var arr = url.split('/');
+var domain = arr[0] + '//' + arr[2];
+
 loginButton.addEventListener('click', function() {
     let xhr = new XMLHttpRequest();
 
@@ -12,7 +16,6 @@ loginButton.addEventListener('click', function() {
             window.location.href = this.responseText;
         }
     }
-    // TODO: Update to just grab current url then add /api/auth
-    xhr.open("GET", "http://24.25.205.133/api/auth");
+    xhr.open("GET", domain + "/api/auth");
     xhr.send();
 });
