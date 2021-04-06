@@ -12,7 +12,12 @@ loginButton.addEventListener('click', function() {
             window.location.href = this.responseText;
         }
     }
+<<<<<<< HEAD
     // TODO: Update to just use current URL then add endpoint
     xhr.open("GET", "http://localhost:5000/auth");
+=======
+    // TODO: Update to just grab current url then add /api/auth
+    xhr.open("GET", "http://24.25.205.133/api/auth");
+>>>>>>> production
     xhr.send();
 });

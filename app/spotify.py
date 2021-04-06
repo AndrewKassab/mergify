@@ -3,7 +3,7 @@ from spotipy import oauth2
 import os
 import requests
 import json
-from dotenv import load_dotenv 
+from dotenv import load_dotenv
 
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 load_dotenv(dotenv_path)

@@ -3,12 +3,10 @@ let destinationDataList = document.getElementById('destination_playlists');
 
 let xhr = new XMLHttpRequest();
 
-// TODO: Some sort of page load while this request is completed
-
 xhr.onreadystatechange = function() {
     if (this.readyState == XMLHttpRequest.DONE) {
-        // TODO: Error handling on page, output message / redirect to login?
         if (xhr.status != 200) {
+            window.location.href = "/login.html";
             return;
         }
         var response = JSON.parse(this.responseText);
@@ -25,7 +23,6 @@ xhr.onreadystatechange = function() {
     }
 }
 
-// TODO: Update to just use current URL then add endpoint
-xhr.open('GET', 'http://localhost:5000/playlists');
-xhr.withCredentials = true; // TODO: DEV ONLY
+// TODO: Update to just grab current URL then add endpoint
+xhr.open('GET', 'http://24.25.205.133/api/playlists');
 xhr.send()
