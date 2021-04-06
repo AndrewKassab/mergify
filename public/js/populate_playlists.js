@@ -25,7 +25,7 @@ xhr.onreadystatechange = function() {
     }
 }
 
-// TODO: Update to just use current URL then add endpoint
+// DEV URL
 xhr.open('GET', 'http://localhost:5000/playlists');
-xhr.withCredentials = true; // TODO: DEV ONLY
+xhr.withCredentials = true; // DEV ONLY
 xhr.send()
