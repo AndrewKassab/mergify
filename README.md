@@ -4,6 +4,7 @@
 
 # Development 
 
+- Branch off of the development branch 
 - You must create your own app at [Spotify for Developers](https://developer.spotify.com/), follow their instructions provided. 
 - After creating your app, you will receive a Client ID and Client Secret. 
 You must create a .env file in the app directory with the following fields:
