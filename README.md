@@ -15,7 +15,7 @@ You must create a .env file in the app directory with the following fields:
 
 `python3 -m pip install -r requirements.txt`
 
-- After that, go ahead and execute `flask run` from within the app directory
+- After that, go ahead and execute `python3 __init__.py` from within the app directory
 
 - Open `login.html` with VSCode Live Server 
 
