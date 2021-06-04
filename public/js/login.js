@@ -16,11 +16,6 @@ loginButton.addEventListener('click', function() {
             window.location.href = this.responseText;
         }
     }
-<<<<<<< HEAD
-    // DEV URL
-    xhr.open("GET", "http://localhost:5000/auth");
-=======
     xhr.open("GET", domain + "/api/auth");
->>>>>>> 21dbe94b883da4c1bbd7230f7349bc929f60ab71
     xhr.send();
 });

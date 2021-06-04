@@ -27,11 +27,5 @@ xhr.onreadystatechange = function() {
     }
 }
 
-<<<<<<< HEAD
-// DEV URL
-xhr.open('GET', 'http://localhost:5000/playlists');
-xhr.withCredentials = true; // DEV ONLY
-=======
 xhr.open('GET', domain + '/api/playlists');
->>>>>>> 21dbe94b883da4c1bbd7230f7349bc929f60ab71
 xhr.send()
