@@ -6,18 +6,18 @@
 html, body, main {
     height: 100%;
     width: 100%;
-    background-color: #191414;
+    background-color: #0a0514;
 }
 
 header {
     margin-left: 1%;
     margin-right: 1%;
-    margin-top: 10px; 
+    margin-top: 5px; 
     margin-bottom: 1%;
-    padding: 20px;
-    height: 130px;
+    padding: 0.5%;
+    height: 11%;
     text-align: center;
-    background-color: #191414;
+    background-color: #333333;
     border-radius: 10px;
     line-height: 60px;
     justify-content: center;
@@ -37,7 +37,7 @@ header {
 
 #source {
     display: flex;
-    height: 62%;
+    height: 60%;
     width: 100%;
 }
 
@@ -86,10 +86,11 @@ header {
     margin-top: 5%;
     width: 100%;
     height: 80%;
-    background-color: rgb(105, 105, 105);
+    background-color: rgb(43, 43, 43);
     font-size: 180%;
     border-radius: 10px;
-    padding: 20px
+    padding: 20px;
+    color: white;
 }
 
 .select option {
@@ -101,7 +102,7 @@ header {
     width: 65%;
     height: 23%;
     margin-bottom: 10%;
-    background-color: #191414c5;
+    background-color: #333333;
     border-radius: 10px;
     box-shadow: 0px 3px 15px rgba(1, 1, 1, 0.2);
 }
