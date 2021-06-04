@@ -1,4 +1,8 @@
 spotipy
 flask
 flask_cors
+<<<<<<< HEAD
+=======
+mysql-connector-python
+>>>>>>> production
 python-dotenv

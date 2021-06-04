@@ -13,6 +13,10 @@ let closeButton = document.getElementById('closemodal');
 
 var request = new XMLHttpRequest();
 
+var url = window.location.href;
+var arr = url.split('/');
+var domain = arr[0] + '//' + arr[2];
+
 request.onreadystatechange = function() {
     if (this.readyState == XMLHttpRequest.DONE) {
         loadWheel.style.display = "none";
@@ -81,9 +85,13 @@ function merge() {
     data['destination_playlist'] = destinationPlaylist;
     data['to_new'] = isNewPlaylist;
 
+<<<<<<< HEAD
     // DEV URL
     request.open('POST', 'http://localhost:5000/merge');
     request.withCredentials = true; // DEV ONLY
+=======
+    request.open('POST', domain + '/api/merge');
+>>>>>>> 21dbe94b883da4c1bbd7230f7349bc929f60ab71
     request.setRequestHeader('Content-Type', 'application/json');
     request.send(JSON.stringify(data));
     modal.style.display = "";
