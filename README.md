@@ -1,4 +1,4 @@
-# Mergify
+# [Mergify](http://mergifymusic.com)
 
 - Merge and sync up your spotify playlists!
 
